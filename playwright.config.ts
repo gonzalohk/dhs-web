@@ -32,6 +32,6 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     timeout: 240_000,
     // Lets the contact form accept inquiries without Supabase (logged only). See src/app/contact/actions.ts.
-    env: { E2E: "1" },
+    env: { E2E: "1", E2E_DEMO: "1" },
   },
 });

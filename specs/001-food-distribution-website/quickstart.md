@@ -2,8 +2,8 @@
 
 ## Prerequisites
 - Node.js 20+ (tested with Node 24).
-- For production: a Supabase project, a Resend API key, and optionally a Cloudinary cloud name and a
-  Google Tag Manager container ID.
+- For production: a Supabase project, a Resend API key, and optionally a Google Tag Manager
+  container ID.
 - Copy `.env.example` to `.env.local` and fill it in. Never commit `.env.local`.
 
 Without Supabase the site still runs with placeholder content from `src/content/placeholder.ts`; in
@@ -24,7 +24,7 @@ All public content is edited in the Supabase dashboard, Table Editor:
   A product shows its price when `price_bob` and `unit` are filled; leave `price_bob` empty to show
   "Solicitar cotización". Categories without published products are hidden.
 - `faqs` (topic: ordering, payment, delivery, returns, other) and `testimonials`.
-- Images: upload to Cloudinary and put the image's public id in `image_public_id`.
+- Images: upload them in the staff area (feature 002); they are stored in Supabase Storage.
 Changes appear on the site within one hour (pages revalidate every 3600 seconds).
 
 ## Run

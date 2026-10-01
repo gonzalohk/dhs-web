@@ -1,18 +1,20 @@
 import { JsonLd } from "@/components/JsonLd";
 import { PageHeader } from "@/components/PageHeader";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
-import { getFaqs, getSettings } from "@/lib/content";
+import { getFaqs, getPageTexts, getSettings, pageText } from "@/lib/content";
 import { breadcrumbJsonLd, buildMetadata, faqPageJsonLd } from "@/lib/seo";
 import type { FaqTopic } from "@/lib/types";
 
 export const revalidate = 3600;
 
-export const metadata = buildMetadata({
-  title: "Preguntas frecuentes",
-  description:
-    "Respuestas sobre pedidos, formas de pago, entregas y devoluciones de nuestra distribuidora de alimentos.",
-  path: "/faq",
-});
+export async function generateMetadata() {
+  const settings = await getSettings();
+  return buildMetadata({
+    title: "Preguntas frecuentes",
+    description: `Respuestas sobre pedidos, formas de pago, entregas y devoluciones de ${settings.companyName}, distribuidora de alimentos.`,
+    path: "/faq",
+  });
+}
 
 const topics: { id: FaqTopic; label: string }[] = [
   { id: "ordering", label: "Pedidos" },
@@ -23,7 +25,7 @@ const topics: { id: FaqTopic; label: string }[] = [
 ];
 
 export default async function FaqPage() {
-  const [faqs, settings] = await Promise.all([getFaqs(), getSettings()]);
+  const [faqs, settings, texts] = await Promise.all([getFaqs(), getSettings(), getPageTexts()]);
   return (
     <>
       <JsonLd
@@ -32,12 +34,15 @@ export default async function FaqPage() {
           { name: "Preguntas frecuentes", path: "/faq" },
         ])}
       />
-      <JsonLd data={faqPageJsonLd(faqs)} />
-      <PageHeader
-        title="Preguntas frecuentes"
-        intro="Si no encuentra su respuesta, escríbanos por WhatsApp."
-      />
+      {faqs.length > 0 && <JsonLd data={faqPageJsonLd(faqs)} />}
+      <PageHeader title="Preguntas frecuentes" intro={pageText(texts, "faq.intro", settings)} />
       <div className="mx-auto max-w-3xl px-4 py-12">
+        {faqs.length === 0 && (
+          <p className="mb-10 text-muted">
+            Pronto publicaremos las respuestas a las preguntas más comunes. Mientras tanto,
+            escríbanos por WhatsApp.
+          </p>
+        )}
         {topics.map((topic) => {
           const items = faqs.filter((f) => f.topic === topic.id);
           if (items.length === 0) return null;

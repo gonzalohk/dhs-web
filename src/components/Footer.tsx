@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatBoPhone } from "@/lib/format";
+import { addressLine, formatBoPhone } from "@/lib/format";
 import type { Settings } from "@/lib/types";
 import { navLinks } from "./Header";
 
@@ -9,13 +9,11 @@ export function Footer({ settings }: { settings: Settings }) {
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 lg:grid-cols-3">
         <div>
           <p className="text-lg font-bold text-white">{settings.companyName}</p>
-          <p className="mt-2 text-sm">{settings.tagline}</p>
+          {settings.tagline && <p className="mt-2 text-sm">{settings.tagline}</p>}
         </div>
         <address className="text-sm not-italic">
           <p className="font-semibold text-white">Contacto</p>
-          <p className="mt-2">
-            {settings.address}, {settings.city}, Bolivia
-          </p>
+          {addressLine(settings) && <p className="mt-2">{addressLine(settings)}</p>}
           <p className="mt-1">
             <a href={`tel:${settings.phone}`} className="underline-offset-2 hover:underline">
               {formatBoPhone(settings.phone)}
@@ -26,7 +24,7 @@ export function Footer({ settings }: { settings: Settings }) {
               {settings.email}
             </a>
           </p>
-          <p className="mt-1">{settings.businessHours}</p>
+          {settings.businessHours && <p className="mt-1">{settings.businessHours}</p>}
         </address>
         <nav aria-label="Pie de página" className="text-sm">
           <p className="font-semibold text-white">Secciones</p>

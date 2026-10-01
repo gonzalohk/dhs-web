@@ -17,7 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL(siteUrl),
     title: { default: settings.companyName, template: `%s | ${settings.companyName}` },
-    description: settings.tagline,
+    description:
+      settings.tagline ||
+      `${settings.companyName}: distribuidora de alimentos al por mayor en Bolivia.`,
     openGraph: { siteName: settings.companyName, locale: "es_BO", type: "website" },
   };
 }

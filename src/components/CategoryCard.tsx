@@ -11,7 +11,7 @@ export function CategoryCard({ category, priority = false, headingLevel: Heading
       className="group block overflow-hidden rounded-2xl border border-brand-100 bg-white shadow-sm transition-shadow hover:shadow-md"
     >
       <Image
-        src={category.imagePublicId ?? "/images/placeholder.svg"}
+        src={category.imageSrc ?? "/images/placeholder.svg"}
         alt={category.imageAlt}
         width={400}
         height={250}

@@ -12,7 +12,7 @@ export async function signIn(formData: FormData) {
     email: String(formData.get("email") ?? ""),
     password: String(formData.get("password") ?? ""),
   });
-  redirect(error ? "/admin/login?error=1" : "/admin/inquiries");
+  redirect(error ? "/admin/login?error=1" : "/admin");
 }
 
 export async function signOut() {

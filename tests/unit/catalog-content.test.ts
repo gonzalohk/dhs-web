@@ -7,7 +7,8 @@ const category = (id: string): Category => ({
   slug: id,
   name: id,
   description: "",
-  imagePublicId: null,
+  imagePath: null,
+  imageSrc: null,
   imageAlt: "",
 });
 const product = (id: string, categoryId: string): Product => ({
@@ -17,7 +18,8 @@ const product = (id: string, categoryId: string): Product => ({
   description: "",
   priceBob: null,
   unit: null,
-  imagePublicId: null,
+  imagePath: null,
+  imageSrc: null,
   imageAlt: "",
 });
 

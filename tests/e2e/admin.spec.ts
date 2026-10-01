@@ -8,6 +8,26 @@ test("signed-out visitors are sent to sign-in and see no inquiries", async ({ pa
   await expect(page.getByTestId("inquiry")).toHaveCount(0);
 });
 
+const adminRoutes = [
+  "/admin",
+  "/admin/company",
+  "/admin/texts",
+  "/admin/categories",
+  "/admin/products",
+  "/admin/faqs",
+  "/admin/testimonials",
+  "/admin/history",
+  "/admin/inquiries",
+];
+
+test("every staff route redirects signed-out visitors to sign-in (SC-007)", async ({ page }) => {
+  for (const route of adminRoutes) {
+    await page.goto(route);
+    await expect(page, route).toHaveURL(/\/admin\/login/);
+    await expect(page.getByRole("heading", { name: "Ingreso del personal" })).toBeVisible();
+  }
+});
+
 test("staff area is noindex and not linked from public pages", async ({ page }) => {
   await page.goto("/admin/login");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);

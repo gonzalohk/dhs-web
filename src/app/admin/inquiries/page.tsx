@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { formatBoPhone } from "@/lib/format";
 import { staffClient } from "@/lib/supabase";
 import type { Inquiry, InquiryStatus } from "@/lib/types";
-import { setInquiryStatus, signOut } from "../actions";
+import { setInquiryStatus } from "../actions";
 
 const filters = [
   { id: "all", label: "Todas" },
@@ -46,14 +46,7 @@ export default async function InquiriesPage({ searchParams }: PageProps<"/admin/
 
   return (
     <>
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold text-brand-800">Consultas recibidas</h1>
-        <form action={signOut}>
-          <button className="min-h-11 rounded-full border border-gray-400 px-4">
-            Cerrar sesión
-          </button>
-        </form>
-      </div>
+      <h1 className="text-2xl font-bold text-brand-800">Consultas recibidas</h1>
 
       <nav aria-label="Filtrar por estado" className="mt-6 flex gap-2">
         {filters.map((f) => (

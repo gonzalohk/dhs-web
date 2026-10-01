@@ -25,9 +25,7 @@ export async function proxy(request: NextRequest) {
   }
 
   if (!signedIn && !isLogin) return NextResponse.redirect(new URL("/admin/login", request.url));
-  if (signedIn && (isLogin || pathname === "/admin")) {
-    return NextResponse.redirect(new URL("/admin/inquiries", request.url));
-  }
+  if (signedIn && isLogin) return NextResponse.redirect(new URL("/admin", request.url));
   return response;
 }
 

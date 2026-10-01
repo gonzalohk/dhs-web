@@ -61,7 +61,7 @@ export default async function CategoryPage({ params }: PageProps<"/products/[cat
             <ProductCard
               key={product.id}
               product={product}
-              fallbackImage={category.imagePublicId}
+              fallbackImage={category.imageSrc}
               whatsappNumber={settings.whatsappNumber}
             />
           ))}

@@ -1,6 +1,10 @@
 import Link from "next/link";
 
-type Props = { title: string; intro: string; breadcrumb?: { name: string; href: string }[] };
+type Props = {
+  title: string;
+  intro?: string | null;
+  breadcrumb?: { name: string; href: string }[];
+};
 
 /** Page title (the page's only h1) with a short introduction and optional breadcrumb. */
 export function PageHeader({ title, intro, breadcrumb }: Props) {
@@ -21,7 +25,7 @@ export function PageHeader({ title, intro, breadcrumb }: Props) {
           </nav>
         )}
         <h1 className="text-3xl font-bold tracking-tight text-brand-800 sm:text-4xl">{title}</h1>
-        <p className="mt-3 max-w-2xl text-lg text-muted">{intro}</p>
+        {intro && <p className="mt-3 max-w-2xl text-lg text-muted">{intro}</p>}
       </div>
     </div>
   );

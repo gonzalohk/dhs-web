@@ -12,11 +12,11 @@
 
 ### Session 2026-09-30
 
-- Q: ¿En qué país opera la empresa y dónde estarán sus clientes principales? → A: Bolivia, principalmente
-- Q: ¿Los visitantes verán precios o solo pedirán cotización? → A: Precios públicos solo en algunos productos; el resto por cotización
-- Q: ¿Qué canal de contacto debe destacar más? → A: WhatsApp como acción principal; formulario y teléfono secundarios
-- Q: ¿Cómo gestiona la empresa las consultas recibidas? → A: Panel protegido en el sitio para verlas y marcarlas como atendidas
-- Q: ¿Cuántos productos tendrá el catálogo al lanzar? → A: Menos de 30; listado por categoría, sin búsqueda ni página propia por producto
+- Q: In which country does the company operate and where are its main customers? → A: Bolivia, mainly
+- Q: Will visitors see product prices or only request a quote? → A: Public prices on some products only; the rest by quote
+- Q: Which contact channel should stand out most? → A: WhatsApp as the primary action; form and phone secondary
+- Q: How does the company manage received inquiries? → A: A protected area in the site to view them and mark them as handled
+- Q: How many products will the catalog have at launch? → A: Fewer than 30; list by category, no search or product pages
 
 ## User Scenarios & Testing *(mandatory)*
 

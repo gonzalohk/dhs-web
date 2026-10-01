@@ -122,7 +122,7 @@ cover the contact form and the staff area. No per-product pages (fewer than 30 p
 |-----------|------------|-------------------------------------|
 | Supabase (DB + client) | Lets a non-expert edit catalog, prices, FAQ, testimonials (FR-018) and stores inquiries so none are lost if email fails (FR-008) | Content in repo files needs a developer for every change; email-only loses leads on failure |
 | Supabase Auth + protected `/admin` | Staff must view inquiries and mark them handled (FR-017a/b); accounts created by the company, no public sign-up | Reading inquiries only in the Supabase dashboard was rejected by the user during clarification |
-| Cloudinary | Central image library with automatic AVIF/WebP and resizing (SC-004) | Next's built-in image optimizer is enough for a small catalog; kept as fallback if Cloudinary is dropped |
+| ~~Cloudinary~~ (removed in feature 002) | Replaced by Supabase Storage plus Next's built-in image optimizer; see `specs/002-editable-content-company-data/research.md` | n/a |
 | Resend | Reliable transactional email to the company inbox (FR-008) | Self-hosted SMTP is harder to maintain and deliver |
 | GA4 via Tag Manager | Business needs visit and lead analytics | Loaded deferred with no extra package; can be dropped if analytics is not required |
 | Next.js + React (vs plain HTML) | Server rendering, revalidation, Metadata API, routing, middleware for staff area | Plain static HTML cannot serve an editable catalog or protected area; user-selected |

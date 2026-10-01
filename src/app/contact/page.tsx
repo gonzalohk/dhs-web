@@ -3,8 +3,8 @@ import { MailIcon, PhoneIcon } from "@/components/icons";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHeader } from "@/components/PageHeader";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
-import { getSettings } from "@/lib/content";
-import { formatBoPhone } from "@/lib/format";
+import { getPageTexts, getSettings, pageText } from "@/lib/content";
+import { addressLine, formatBoPhone } from "@/lib/format";
 import { breadcrumbJsonLd, buildMetadata, localBusinessJsonLd } from "@/lib/seo";
 
 export const revalidate = 3600;
@@ -19,7 +19,7 @@ export async function generateMetadata() {
 }
 
 export default async function ContactPage() {
-  const settings = await getSettings();
+  const [settings, texts] = await Promise.all([getSettings(), getPageTexts()]);
   return (
     <>
       <JsonLd data={localBusinessJsonLd(settings)} />
@@ -29,10 +29,7 @@ export default async function ContactPage() {
           { name: "Contacto", path: "/contact" },
         ])}
       />
-      <PageHeader
-        title="Contacto"
-        intro="La forma más rápida de hablar con nosotros es WhatsApp. También puede llamarnos o dejarnos un mensaje."
-      />
+      <PageHeader title="Contacto" intro={pageText(texts, "contact.intro", settings)} />
 
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 lg:grid-cols-2">
         <div>
@@ -73,12 +70,14 @@ export default async function ContactPage() {
                 </a>
               </li>
             </ul>
-            <address className="mt-3 not-italic text-muted">
-              {settings.address}, {settings.city}, Bolivia
-            </address>
-            <p className="mt-2 text-muted">
-              <span className="font-medium text-ink">Horario:</span> {settings.businessHours}
-            </p>
+            {addressLine(settings) && (
+              <address className="mt-3 not-italic text-muted">{addressLine(settings)}</address>
+            )}
+            {settings.businessHours && (
+              <p className="mt-2 text-muted">
+                <span className="font-medium text-ink">Horario:</span> {settings.businessHours}
+              </p>
+            )}
           </section>
 
           {settings.mapUrl && (

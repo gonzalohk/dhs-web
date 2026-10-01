@@ -8,6 +8,7 @@ import {
   localBusinessJsonLd,
   siteUrl,
 } from "@/lib/seo";
+import { publicSettings } from "@/lib/tokens";
 
 describe("buildMetadata", () => {
   it("sets title, description, canonical and social previews", () => {
@@ -22,11 +23,26 @@ describe("buildMetadata", () => {
 
 describe("JSON-LD builders", () => {
   it("describes the business in Bolivia with served cities", () => {
-    const ld = localBusinessJsonLd(settings);
+    const full = {
+      ...settings,
+      address: "Av. Real 123",
+      city: "Santa Cruz de la Sierra",
+      serviceAreas: ["Santa Cruz de la Sierra", "Montero"],
+    };
+    const ld = localBusinessJsonLd(full);
     expect(ld["@type"]).toBe("LocalBusiness");
-    expect(ld.address.addressCountry).toBe("BO");
-    expect(ld.telephone).toMatch(/^\+591\d{8}$/);
+    expect(ld.name).toBe("DHS");
+    expect(ld.address?.addressCountry).toBe("BO");
+    expect(ld.telephone).toBe("+59157734924");
+    expect(ld.email).toBe("distribuidoradhs2026@gmail.com");
     expect(ld.areaServed).toContainEqual({ "@type": "City", name: "Santa Cruz de la Sierra" });
+  });
+
+  it("omits address, description, and served areas that are not available yet", () => {
+    const ld = localBusinessJsonLd(publicSettings(settings));
+    expect(ld).not.toHaveProperty("address");
+    expect(ld).not.toHaveProperty("areaServed");
+    expect(ld).not.toHaveProperty("description");
   });
 
   it("numbers breadcrumb and list items from 1 with absolute URLs", () => {

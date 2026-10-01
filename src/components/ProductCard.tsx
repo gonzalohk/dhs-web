@@ -17,7 +17,7 @@ export function ProductCard({ product, fallbackImage, whatsappNumber }: Props) {
       data-testid="product"
     >
       <Image
-        src={product.imagePublicId ?? fallbackImage ?? "/images/placeholder.svg"}
+        src={product.imageSrc ?? fallbackImage ?? "/images/placeholder.svg"}
         alt={product.imageAlt}
         width={400}
         height={250}

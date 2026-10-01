@@ -1,12 +1,3 @@
-<!--
-Sync Impact Report (temporary; remove before committing)
-- Version change: 1.0.0 → 1.1.0
-- Modified principles: none
-- Added sections: Principle VI (English Documentation)
-- Removed sections: none (language bullet in Technical Standards folded into Principle VI)
-- Deferred items: none
--->
-
 # Proyectos Constitution
 
 ## Core Principles
@@ -55,8 +46,9 @@ All specifications (`spec.md`, including Clarifications and Assumptions), plans,
 data models, contracts, quickstarts, tasks, checklists, code comments, commit messages,
 pull request descriptions, and this constitution MUST be written in English. Identifiers
 in code (variables, functions, files, database tables and columns) MUST also be in English.
-The only exception is user-facing website content, which is written in the language of the
-target audience (Spanish for this project) and MUST be quoted as-is when a spec refers to it.
+The only exceptions are text shown to people using the product (the public website and the staff
+editors), which is written in the language of its audience (Spanish for this project), and a user's
+original request quoted verbatim in a spec's `Input:` line.
 Rationale: one working language keeps the documents consistent, searchable, and readable by
 any contributor or tool.
 
@@ -84,4 +76,4 @@ semantic versioning: MAJOR for removed or redefined principles, MINOR for added 
 materially expanded guidance, PATCH for clarifications. Every plan and review MUST verify
 compliance, and any violation MUST be justified in the plan's complexity tracking.
 
-**Version**: 1.1.0 | **Ratified**: 2026-09-30 | **Last Amended**: 2026-09-30
+**Version**: 1.1.1 | **Ratified**: 2026-09-30 | **Last Amended**: 2026-09-30

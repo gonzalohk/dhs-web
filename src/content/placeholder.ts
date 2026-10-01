@@ -1,44 +1,27 @@
 // Placeholder content used when Supabase is not configured (local development and tests).
-// Mirrors supabase/migrations/0003_seed.sql. Replace with the company's real content in Supabase.
+// Mirrors the data after supabase/migrations/0006_company_data_dhs.sql: DHS contact data, "[Pendiente]"
+// markers for what the owner has not provided, and no invented prices, FAQs, or testimonials.
 import type { Category, Faq, Product, Settings, Testimonial } from "@/lib/types";
 
 export const settings: Settings = {
-  companyName: "Distribuidora Andina",
-  tagline: "Alimentos frescos y abarrotes para su negocio, a tiempo y en todo Santa Cruz.",
-  story:
-    "Nacimos como un pequeño distribuidor familiar en Santa Cruz de la Sierra y hoy abastecemos a restaurantes, tiendas, hoteles e instituciones en varios departamentos de Bolivia. Trabajamos directamente con productores nacionales para ofrecer productos frescos a precios justos.",
-  mission:
-    "Abastecer a los negocios de alimentos de Bolivia con productos de calidad, entregas puntuales y un trato cercano.",
-  values: [
-    "Frescura garantizada",
-    "Puntualidad en cada entrega",
-    "Precios justos",
-    "Trato cercano",
-  ],
-  certifications: [
-    "Registro sanitario SENASAG",
-    "Cadena de frío controlada",
-    "Buenas prácticas de manufactura",
-  ],
-  clientTypes: ["Restaurantes", "Tiendas y minimercados", "Hoteles", "Catering", "Instituciones"],
-  phone: "+59133000000",
-  email: "contacto@example.com",
-  whatsappNumber: "+59170000000",
-  address: "Av. Ejemplo 123, Parque Industrial",
-  city: "Santa Cruz de la Sierra",
-  mapUrl:
-    "https://www.openstreetmap.org/export/embed.html?bbox=-63.22%2C-17.82%2C-63.14%2C-17.76&layer=mapnik",
-  businessHours: "Lunes a viernes de 7:00 a 18:00; sábados de 7:00 a 13:00",
-  serviceAreas: ["Santa Cruz de la Sierra", "Montero", "Warnes", "Cochabamba", "La Paz y El Alto"],
-  deliverySchedule:
-    "Santa Cruz: entregas de lunes a sábado, al día siguiente del pedido. Otras ciudades: dos veces por semana.",
-  minimumOrder: "Pedido mínimo de Bs 500 para entregas sin costo en Santa Cruz.",
-  orderingSteps: [
-    "Escríbanos por WhatsApp o llene el formulario de contacto.",
-    "Le enviamos una cotización según su volumen.",
-    "Abrimos su cuenta de cliente y coordinamos la primera entrega.",
-    "Haga sus pedidos por WhatsApp; los entregamos en su horario.",
-  ],
+  companyName: "DHS",
+  tagline: "[Pendiente] Frase que resume a la empresa",
+  story: "[Pendiente] Historia de la empresa",
+  mission: "[Pendiente] Misión de la empresa",
+  values: ["[Pendiente] Valores de la empresa"],
+  certifications: [],
+  clientTypes: [],
+  phone: "+59157734924",
+  email: "distribuidoradhs2026@gmail.com",
+  whatsappNumber: "+59157734924",
+  address: "[Pendiente] Dirección",
+  city: "[Pendiente] Ciudad",
+  mapUrl: null,
+  businessHours: "[Pendiente] Horario de atención",
+  serviceAreas: [],
+  deliverySchedule: "[Pendiente] Días y horarios de entrega",
+  minimumOrder: "[Pendiente] Pedido mínimo",
+  orderingSteps: [],
 };
 
 export const categories: Category[] = [
@@ -47,7 +30,8 @@ export const categories: Category[] = [
     slug: "frutas-y-verduras",
     name: "Frutas y verduras",
     description: "Productos frescos seleccionados cada día de productores nacionales.",
-    imagePublicId: "/images/categories/frutas-y-verduras.svg",
+    imagePath: "/images/categories/frutas-y-verduras.svg",
+    imageSrc: "/images/categories/frutas-y-verduras.svg",
     imageAlt: "Cajas de frutas y verduras frescas",
   },
   {
@@ -55,7 +39,8 @@ export const categories: Category[] = [
     slug: "lacteos",
     name: "Lácteos y huevos",
     description: "Leche, quesos, yogur y huevos con cadena de frío.",
-    imagePublicId: "/images/categories/lacteos.svg",
+    imagePath: "/images/categories/lacteos.svg",
+    imageSrc: "/images/categories/lacteos.svg",
     imageAlt: "Quesos, leche y huevos",
   },
   {
@@ -63,7 +48,8 @@ export const categories: Category[] = [
     slug: "carnes-y-aves",
     name: "Carnes y aves",
     description: "Cortes de res, cerdo y pollo para cocinas profesionales.",
-    imagePublicId: "/images/categories/carnes-y-aves.svg",
+    imagePath: "/images/categories/carnes-y-aves.svg",
+    imageSrc: "/images/categories/carnes-y-aves.svg",
     imageAlt: "Cortes de carne y pollo",
   },
   {
@@ -71,7 +57,8 @@ export const categories: Category[] = [
     slug: "abarrotes",
     name: "Abarrotes",
     description: "Arroz, azúcar, aceite, harinas y productos secos al por mayor.",
-    imagePublicId: "/images/categories/abarrotes.svg",
+    imagePath: "/images/categories/abarrotes.svg",
+    imageSrc: "/images/categories/abarrotes.svg",
     imageAlt: "Sacos de arroz y productos secos",
   },
   {
@@ -79,7 +66,8 @@ export const categories: Category[] = [
     slug: "bebidas",
     name: "Bebidas",
     description: "Aguas, jugos y refrescos para tiendas y restaurantes.",
-    imagePublicId: "/images/categories/bebidas.svg",
+    imagePath: "/images/categories/bebidas.svg",
+    imageSrc: "/images/categories/bebidas.svg",
     imageAlt: "Botellas de agua y jugos",
   },
   {
@@ -87,7 +75,8 @@ export const categories: Category[] = [
     slug: "congelados",
     name: "Congelados",
     description: "Vegetales, papas y productos congelados listos para cocinar.",
-    imagePublicId: "/images/categories/congelados.svg",
+    imagePath: "/images/categories/congelados.svg",
+    imageSrc: "/images/categories/congelados.svg",
     imageAlt: "Productos congelados",
   },
 ];
@@ -98,9 +87,10 @@ export const products: Product[] = [
     categoryId: "c1",
     name: "Tomate",
     description: "Tomate de primera, caja de 20 kg.",
-    priceBob: 120,
-    unit: "caja 20 kg",
-    imagePublicId: null,
+    priceBob: null,
+    unit: null,
+    imagePath: null,
+    imageSrc: null,
     imageAlt: "Tomates rojos",
   },
   {
@@ -108,9 +98,10 @@ export const products: Product[] = [
     categoryId: "c1",
     name: "Papa holandesa",
     description: "Papa lavada, ideal para freír.",
-    priceBob: 95,
-    unit: "arroba",
-    imagePublicId: null,
+    priceBob: null,
+    unit: null,
+    imagePath: null,
+    imageSrc: null,
     imageAlt: "Papas",
   },
   {
@@ -120,7 +111,8 @@ export const products: Product[] = [
     description: "Plátano, papaya, piña y cítricos según temporada.",
     priceBob: null,
     unit: null,
-    imagePublicId: null,
+    imagePath: null,
+    imageSrc: null,
     imageAlt: "Frutas tropicales",
   },
   {
@@ -130,7 +122,8 @@ export const products: Product[] = [
     description: "Leche pasteurizada en bolsa de 1 litro.",
     priceBob: null,
     unit: null,
-    imagePublicId: null,
+    imagePath: null,
+    imageSrc: null,
     imageAlt: "Leche en bolsa",
   },
   {
@@ -138,9 +131,10 @@ export const products: Product[] = [
     categoryId: "c2",
     name: "Queso menonita",
     description: "Queso semiduro en bloque.",
-    priceBob: 48,
-    unit: "kg",
-    imagePublicId: null,
+    priceBob: null,
+    unit: null,
+    imagePath: null,
+    imageSrc: null,
     imageAlt: "Bloque de queso",
   },
   {
@@ -148,9 +142,10 @@ export const products: Product[] = [
     categoryId: "c2",
     name: "Huevos",
     description: "Huevos frescos, maple de 30 unidades.",
-    priceBob: 32,
-    unit: "maple 30 u",
-    imagePublicId: null,
+    priceBob: null,
+    unit: null,
+    imagePath: null,
+    imageSrc: null,
     imageAlt: "Maple de huevos",
   },
   {
@@ -160,7 +155,8 @@ export const products: Product[] = [
     description: "Pollo fresco refrigerado.",
     priceBob: null,
     unit: null,
-    imagePublicId: null,
+    imagePath: null,
+    imageSrc: null,
     imageAlt: "Pollo entero",
   },
   {
@@ -170,7 +166,8 @@ export const products: Product[] = [
     description: "Cortes para parrilla y guisos.",
     priceBob: null,
     unit: null,
-    imagePublicId: null,
+    imagePath: null,
+    imageSrc: null,
     imageAlt: "Cortes de carne de res",
   },
   {
@@ -178,9 +175,10 @@ export const products: Product[] = [
     categoryId: "c4",
     name: "Arroz grano de oro",
     description: "Arroz nacional, quintal de 46 kg.",
-    priceBob: 310,
-    unit: "quintal",
-    imagePublicId: null,
+    priceBob: null,
+    unit: null,
+    imagePath: null,
+    imageSrc: null,
     imageAlt: "Saco de arroz",
   },
   {
@@ -190,7 +188,8 @@ export const products: Product[] = [
     description: "Aceite de soya, bidón de 5 litros.",
     priceBob: null,
     unit: null,
-    imagePublicId: null,
+    imagePath: null,
+    imageSrc: null,
     imageAlt: "Bidón de aceite",
   },
   {
@@ -200,7 +199,8 @@ export const products: Product[] = [
     description: "Azúcar blanca, quintal de 46 kg.",
     priceBob: null,
     unit: null,
-    imagePublicId: null,
+    imagePath: null,
+    imageSrc: null,
     imageAlt: "Saco de azúcar",
   },
   {
@@ -208,9 +208,10 @@ export const products: Product[] = [
     categoryId: "c5",
     name: "Agua de mesa",
     description: "Botellas de 2 litros, paquete de 6.",
-    priceBob: 30,
-    unit: "paquete",
-    imagePublicId: null,
+    priceBob: null,
+    unit: null,
+    imagePath: null,
+    imageSrc: null,
     imageAlt: "Botellas de agua",
   },
   {
@@ -220,7 +221,8 @@ export const products: Product[] = [
     description: "Jugos de frutas en envase de 1 litro.",
     priceBob: null,
     unit: null,
-    imagePublicId: null,
+    imagePath: null,
+    imageSrc: null,
     imageAlt: "Jugos en envase",
   },
   {
@@ -230,76 +232,12 @@ export const products: Product[] = [
     description: "Papas bastón congeladas, bolsa de 2,5 kg.",
     priceBob: null,
     unit: null,
-    imagePublicId: null,
+    imagePath: null,
+    imageSrc: null,
     imageAlt: "Papas prefritas congeladas",
   },
 ];
 
-export const faqs: Faq[] = [
-  {
-    id: "f1",
-    topic: "ordering",
-    question: "¿Cómo hago mi primer pedido?",
-    answer:
-      "Escríbanos por WhatsApp o llene el formulario de contacto. Le enviamos una cotización, abrimos su cuenta y coordinamos la entrega.",
-  },
-  {
-    id: "f2",
-    topic: "ordering",
-    question: "¿Venden a personas particulares?",
-    answer:
-      "Trabajamos principalmente con negocios, pero atendemos pedidos grandes de particulares para eventos.",
-  },
-  {
-    id: "f3",
-    topic: "payment",
-    question: "¿Qué formas de pago aceptan?",
-    answer:
-      "Transferencia bancaria, pago QR y efectivo contra entrega. Clientes frecuentes pueden solicitar crédito.",
-  },
-  {
-    id: "f4",
-    topic: "payment",
-    question: "¿Emiten factura?",
-    answer: "Sí, emitimos factura en todas las ventas.",
-  },
-  {
-    id: "f5",
-    topic: "delivery",
-    question: "¿A qué zonas entregan?",
-    answer:
-      "Santa Cruz de la Sierra y alrededores todos los días hábiles, y otras ciudades dos veces por semana.",
-  },
-  {
-    id: "f6",
-    topic: "delivery",
-    question: "¿Tiene costo la entrega?",
-    answer:
-      "Es gratuita en Santa Cruz desde el pedido mínimo. Para otras ciudades le indicamos el costo en la cotización.",
-  },
-  {
-    id: "f7",
-    topic: "returns",
-    question: "¿Qué pasa si un producto llega en mal estado?",
-    answer:
-      "Avísenos dentro de las 24 horas y lo reponemos en la siguiente entrega o le devolvemos el importe.",
-  },
-];
+export const faqs: Faq[] = [];
 
-export const testimonials: Testimonial[] = [
-  {
-    id: "t1",
-    author: "Restaurante en Equipetrol",
-    quote: "Siempre llegan a tiempo y la verdura es fresca. Nos simplificaron las compras.",
-  },
-  {
-    id: "t2",
-    author: "Minimercado en Montero",
-    quote: "Buenos precios por volumen y atención rápida por WhatsApp.",
-  },
-  {
-    id: "t3",
-    author: "Servicio de catering",
-    quote: "Nos resuelven pedidos grandes con poca anticipación.",
-  },
-];
+export const testimonials: Testimonial[] = [];

@@ -6,7 +6,7 @@ test("FAQ answers ordering, payment, delivery and returns", async ({ page }) => 
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
   }
   await page.getByText("¿Qué formas de pago aceptan?").click();
-  await expect(page.getByText(/Transferencia bancaria, pago QR/)).toBeVisible();
+  await expect(page.getByText(/Pago de prueba: transferencia/)).toBeVisible();
 });
 
 test("home and about show certifications, client types and testimonials", async ({ page }) => {

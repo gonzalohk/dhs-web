@@ -26,3 +26,9 @@ export function whatsappLink(phone: string, message: string): string {
   const digits = phone.replace(/\D/g, "");
   return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }
+
+/** "Address, City, Bolivia" using only the parts that exist; empty when no address data is available. */
+export function addressLine(parts: { address: string; city: string }): string {
+  const known = [parts.address, parts.city].filter(Boolean);
+  return known.length > 0 ? [...known, "Bolivia"].join(", ") : "";
+}

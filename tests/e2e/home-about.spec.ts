@@ -5,10 +5,8 @@ test("home explains the company and offers contact on the first screen", async (
   await page.goto("/");
   const viewportHeight = page.viewportSize()!.height;
   const h1 = page.getByRole("heading", { level: 1 });
-  await expect(h1).toContainText("Distribuidora Andina");
-  await expect(
-    page.getByText(/Alimentos frescos y abarrotes para su negocio, a tiempo/).first(),
-  ).toBeVisible();
+  await expect(h1).toContainText("DHS");
+  await expect(page.getByText(/Alimentos para su negocio\./).first()).toBeVisible();
 
   const cta = page.getByRole("link", { name: /Solicitar cotización por WhatsApp/ });
   const ctaBox = await cta.boundingBox();
@@ -16,7 +14,7 @@ test("home explains the company and offers contact on the first screen", async (
 
   await expect(page.getByRole("heading", { name: "Nuestros productos" })).toBeVisible();
   await expect(page.getByRole("link", { name: /Frutas y verduras/ })).toBeVisible();
-  await expect(page.getByText(/Atendemos en Santa Cruz de la Sierra/)).toBeVisible();
+  await expect(page.getByText(/Atendemos en Santa Cruz, Montero/)).toBeVisible();
   await expectNoHorizontalScroll(page);
 });
 

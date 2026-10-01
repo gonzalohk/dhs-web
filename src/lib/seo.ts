@@ -20,21 +20,28 @@ export function buildMetadata({ title, description, path }: PageMeta): Metadata 
 }
 
 export function localBusinessJsonLd(s: Settings) {
+  const hasAddress = Boolean(s.address || s.city);
   return {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: s.companyName,
-    description: s.tagline,
+    ...(s.tagline ? { description: s.tagline } : {}),
     url: siteUrl,
     telephone: s.phone,
     email: s.email,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: s.address,
-      addressLocality: s.city,
-      addressCountry: "BO",
-    },
-    areaServed: s.serviceAreas.map((name) => ({ "@type": "City", name })),
+    ...(hasAddress
+      ? {
+          address: {
+            "@type": "PostalAddress",
+            ...(s.address ? { streetAddress: s.address } : {}),
+            ...(s.city ? { addressLocality: s.city } : {}),
+            addressCountry: "BO",
+          },
+        }
+      : {}),
+    ...(s.serviceAreas.length > 0
+      ? { areaServed: s.serviceAreas.map((name) => ({ "@type": "City", name })) }
+      : {}),
   };
 }
 

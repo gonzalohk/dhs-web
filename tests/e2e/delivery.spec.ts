@@ -13,7 +13,7 @@ test("delivery page explains coverage, schedule, minimum order and how to start"
   ]) {
     await expect(page.getByRole("heading", { name })).toBeVisible();
   }
-  await expect(page.getByText("Santa Cruz de la Sierra", { exact: true })).toBeVisible();
+  await expect(page.getByText("Montero", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Abrir cuenta por WhatsApp" })).toHaveAttribute(
     "href",
     /wa\.me\/591/,
