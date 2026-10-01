@@ -1,0 +1,30 @@
+{
+  "ci": {
+    "collect": {
+      "startServerCommand": "npm run start -- -p 3200",
+      "startServerReadyPattern": "Ready",
+      "url": [
+        "http://localhost:3200/",
+        "http://localhost:3200/about",
+        "http://localhost:3200/products",
+        "http://localhost:3200/products/frutas-y-verduras",
+        "http://localhost:3200/delivery",
+        "http://localhost:3200/faq",
+        "http://localhost:3200/contact"
+      ],
+      "numberOfRuns": 1,
+      "settings": { "chromeFlags": "--no-sandbox --headless=new" }
+    },
+    "assert": {
+      "assertions": {
+        "categories:seo": ["error", { "minScore": 1 }],
+        "categories:performance": ["error", { "minScore": 0.9 }],
+        "categories:accessibility": ["error", { "minScore": 0.9 }],
+        "categories:best-practices": ["error", { "minScore": 0.9 }],
+        "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }]
+      }
+    },
+    "upload": { "target": "filesystem", "outputDir": ".lighthouseci" }
+  }
+}
