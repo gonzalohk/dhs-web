@@ -1,9 +1,9 @@
 <!--
 Sync Impact Report (temporary; remove before committing)
-- Version change: (unfilled template) → 1.0.0
-- Modified principles: none (initial ratification)
-- Added sections: Core Principles I–V, Technical Standards, Development Workflow, Governance
-- Removed sections: none
+- Version change: 1.0.0 → 1.1.0
+- Modified principles: none
+- Added sections: Principle VI (English Documentation)
+- Removed sections: none (language bullet in Technical Standards folded into Principle VI)
 - Deferred items: none
 -->
 
@@ -50,6 +50,16 @@ verified at common widths (320, 768, and 1280 px). Touch targets MUST be at leas
 44×44 px, text MUST remain readable without zooming, and there MUST be no horizontal
 scrolling. The viewport meta tag is required.
 
+### VI. English Documentation
+All specifications (`spec.md`, including Clarifications and Assumptions), plans, research,
+data models, contracts, quickstarts, tasks, checklists, code comments, commit messages,
+pull request descriptions, and this constitution MUST be written in English. Identifiers
+in code (variables, functions, files, database tables and columns) MUST also be in English.
+The only exception is user-facing website content, which is written in the language of the
+target audience (Spanish for this project) and MUST be quoted as-is when a spec refers to it.
+Rationale: one working language keeps the documents consistent, searchable, and readable by
+any contributor or tool.
+
 ## Technical Standards
 
 - Prefer plain HTML, CSS, and standard-library or platform features; add a framework
@@ -57,13 +67,11 @@ scrolling. The viewport meta tag is required.
 - Images MUST be optimized, sized explicitly, and lazy-loaded when below the fold.
 - Accessibility (keyboard navigation, sufficient contrast, labels) is required because
   it directly supports SEO and mobile usability.
-- Specifications, plans, tasks, code comments, commit messages, and this constitution
-  MUST be written in English.
 
 ## Development Workflow
 
 - Work follows the Spec Kit flow: specify → plan → tasks → implement.
-- Every plan MUST include a Constitution Check against Principles I–V.
+- Every plan MUST include a Constitution Check against Principles I–VI.
 - Changes MUST be small and reviewable; each change leaves tests passing.
 - Before completion, run the test suite, a Lighthouse audit, and a manual check at mobile
   and desktop widths.
@@ -76,4 +84,4 @@ semantic versioning: MAJOR for removed or redefined principles, MINOR for added 
 materially expanded guidance, PATCH for clarifications. Every plan and review MUST verify
 compliance, and any violation MUST be justified in the plan's complexity tracking.
 
-**Version**: 1.0.0 | **Ratified**: 2026-09-30 | **Last Amended**: 2026-09-30
+**Version**: 1.1.0 | **Ratified**: 2026-09-30 | **Last Amended**: 2026-09-30
