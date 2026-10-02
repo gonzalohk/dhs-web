@@ -9,7 +9,8 @@ test("every public page shows the DHS name and contact data and no placeholder c
 }) => {
   for (const route of publicRoutes) {
     await page.goto(route);
-    await expect(page.locator("header")).toContainText("DHS");
+    // The header shows only the logo; its accessible name carries the company name.
+    await expect(page.locator("header").getByRole("link", { name: /DHS/ }).first()).toBeVisible();
     await expect(page.locator("footer")).toContainText("DHS");
     await expect(page.locator("footer")).toContainText("+591 5773 4924");
 

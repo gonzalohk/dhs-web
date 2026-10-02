@@ -1,6 +1,5 @@
 # DHS food distribution website
 
-
 Website for DHS, a food distributor in Bolivia: company information, product catalog by category (with
 optional prices in Bs), WhatsApp-first contact, a contact form, and a protected staff area where the
 company edits its own data and content without a developer.
@@ -296,8 +295,12 @@ Fields that still say `[Pendiente]` are hidden from the public site and listed o
 - **Palette**: taken from the logo (slate navy `#304159`, orange `#EF8F21`, lime green `#99C34D`) and defined only as
   design tokens in `src/app/globals.css`. Logo orange and green are fills; text uses the darker `accent-700` and
   `support-700`. `tests/unit/palette.test.ts` checks contrast.
-- **Logos** live in `src/assets/brand/`: `logo-dhs.svg` (vector, used in the footer), `logo-dhs.png` (transparent),
-  `logo-icon.png` (cube and hand, used in the header) and `source/logo-dhs-vector.ai` (Illustrator master).
+- **Logos and cover** live in `src/assets/brand/`: `logo-header.png` (logo mark, used in the header),
+  `logo-footer.png` (full logo, used in the footer inside a white container), `portada.jpg` (the home page cover,
+  2400 px wide) and `source/logo-dhs-vector.ai` (Illustrator master).
+- **Home cover**: configured in `src/content/cover.ts`. With a cover, the action buttons sit over the image (below it
+  on phones) and the title and subtitle are not shown (the `h1` stays for screen readers and search engines). Set
+  `cover` to `null` to show the text hero instead.
 - **Tab icon and social preview**: `src/app/favicon.ico`, `icon.png`, `apple-icon.png`, `opengraph-image.png`,
   generated from the logo.
 

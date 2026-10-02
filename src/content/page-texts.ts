@@ -29,20 +29,8 @@ export const PAGE_TEXT_PAGES: { id: PageTextPage; label: string }[] = [
 ];
 
 export const PAGE_TEXTS: PageTextDef[] = [
-  def(
-    "home.eyebrow",
-    "home",
-    "Inicio: texto sobre el título",
-    "Distribuidora de alimentos",
-    80,
-  ),
-  def(
-    "home.title",
-    "home",
-    "Inicio: título principal",
-    "{companyName}",
-    120,
-  ),
+  def("home.eyebrow", "home", "Inicio: texto sobre el título", "Distribuidora de alimentos", 80),
+  def("home.title", "home", "Inicio: título principal", "{companyName}", 120),
   def(
     "home.categoriesIntro",
     "home",

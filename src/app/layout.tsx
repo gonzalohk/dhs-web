@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import Script from "next/script";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -9,7 +9,11 @@ import { COMPANY_FULL_NAME } from "@/lib/brand";
 import { siteUrl } from "@/lib/seo";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
 
@@ -28,7 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const settings = await getSettings();
   return (
-    <html lang="es-BO" className={`${geistSans.variable} antialiased`}>
+    <html lang="es-BO" className={`${montserrat.variable} antialiased`}>
       <body className="flex min-h-dvh flex-col">
         <a
           href="#contenido"

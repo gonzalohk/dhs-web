@@ -66,7 +66,8 @@ export default async function ContactPage() {
                   href={`mailto:${settings.email}`}
                   className="inline-flex min-h-11 items-center gap-2 font-medium text-brand-700 hover:underline"
                 >
-                  <MailIcon /> {settings.email}
+                  <MailIcon className="size-5 shrink-0" />
+                  <span className="break-all">{settings.email}</span>
                 </a>
               </li>
             </ul>

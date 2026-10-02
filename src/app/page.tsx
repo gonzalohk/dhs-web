@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import banner from "@/assets/brand/banner.jpg";
 import { CategoryCard } from "@/components/CategoryCard";
 import { CheckIcon } from "@/components/icons";
 import { JsonLd } from "@/components/JsonLd";
 import { TrustSection } from "@/components/TrustSection";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { getCatalog, getPageTexts, getSettings, getTestimonials, pageText } from "@/lib/content";
+import { COVER_ALT, cover } from "@/content/cover";
 import { buildMetadata, localBusinessJsonLd } from "@/lib/seo";
 
 export const revalidate = 3600;
@@ -22,6 +22,25 @@ export async function generateMetadata() {
     }),
     title: { absolute: title },
   };
+}
+
+/** The two main actions of the first screen. */
+function HeroActions({ phone }: { phone: string }) {
+  return (
+    <>
+      <WhatsAppButton
+        phone={phone}
+        message="Hola, quisiera una cotización para mi negocio."
+        label="Solicitar cotización por WhatsApp"
+      />
+      <Link
+        href="/products"
+        className="inline-flex min-h-11 items-center justify-center rounded-full border-2 border-brand-600 px-5 py-2.5 font-semibold text-brand-700 hover:bg-brand-50"
+      >
+        Ver productos
+      </Link>
+    </>
+  );
 }
 
 export default async function HomePage() {
@@ -42,43 +61,40 @@ export default async function HomePage() {
     <>
       <JsonLd data={localBusinessJsonLd(settings)} />
 
-      <section className="on-dark relative isolate overflow-hidden bg-brand-900">
-        <Image src={banner} alt="" fill priority sizes="100vw" className="-z-20 object-cover" />
-        {/* Navy veil: keeps the white text readable over the photo (stronger on the text side). */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-gradient-to-r from-brand-900/90 via-brand-900/75 to-brand-900/45"
-        />
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:py-28">
-          {t("home.eyebrow") && (
-            <p className="font-semibold text-accent-400">{t("home.eyebrow")}</p>
-          )}
-          <h1 className="mt-2 max-w-3xl text-3xl font-bold tracking-tight text-white sm:text-5xl">
-            {t("home.title")}
-          </h1>
-          {settings.tagline && (
-            <p className="mt-4 max-w-2xl text-lg text-brand-100">{settings.tagline}</p>
-          )}
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <WhatsAppButton
-              phone={settings.whatsappNumber}
-              message="Hola, quisiera una cotización para mi negocio."
-              label="Solicitar cotización por WhatsApp"
-            />
-            <Link
-              href="/products"
-              className="inline-flex min-h-11 items-center justify-center rounded-full border-2 border-white px-5 py-2.5 font-semibold text-white hover:bg-white/15"
-            >
-              Ver productos
-            </Link>
+      {cover ? (
+        /* The cover is a finished design (logo, delivery person, brand shapes) shown whole and full width,
+           with the actions over it. Title and subtitle are not shown (the h1 stays for screen readers and
+           search engines). Without a cover (see src/content/cover.ts) the text hero below is used. */
+        <section aria-label="DHS" className="relative bg-brand-50">
+          <h1 className="sr-only">{t("home.title")}</h1>
+          <Image src={cover} alt={COVER_ALT} priority sizes="100vw" className="h-auto w-full" />
+          <div className="flex flex-col gap-3 px-4 py-5 sm:flex-row md:absolute md:bottom-[5%] md:left-[4%] md:rounded-full md:bg-white/90 md:p-2 md:shadow-lg">
+            <HeroActions phone={settings.whatsappNumber} />
           </div>
-          {settings.serviceAreas.length > 0 && (
-            <p className="mt-4 text-sm text-brand-100">
-              Atendemos en {settings.serviceAreas.join(", ")}.
-            </p>
-          )}
-        </div>
-      </section>
+        </section>
+      ) : (
+        <section className="bg-gradient-to-br from-brand-50 to-white">
+          <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+            {t("home.eyebrow") && (
+              <p className="font-semibold text-accent-700">{t("home.eyebrow")}</p>
+            )}
+            <h1 className="mt-2 max-w-3xl text-3xl font-bold tracking-tight text-brand-800 sm:text-5xl">
+              {t("home.title")}
+            </h1>
+            {settings.tagline && (
+              <p className="mt-4 max-w-2xl text-lg text-muted">{settings.tagline}</p>
+            )}
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <HeroActions phone={settings.whatsappNumber} />
+            </div>
+            {settings.serviceAreas.length > 0 && (
+              <p className="mt-4 text-sm text-muted">
+                Atendemos en {settings.serviceAreas.join(", ")}.
+              </p>
+            )}
+          </div>
+        </section>
+      )}
 
       {catalog.length > 0 && (
         <section aria-labelledby="categories-title" className="mx-auto max-w-6xl px-4 py-14">
