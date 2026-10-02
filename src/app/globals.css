@@ -1,17 +1,33 @@
 @import "tailwindcss";
 
-/* Design tokens: one fresh green brand colour, a warm accent, neutral text. */
+/*
+ * Design tokens: the DHS palette, taken from the logo: slate navy #304159 (primary), orange #EF8F21
+ * (accent) and lime green #99C34D (supporting). Lighter/darker steps keep text accessible: logo orange and
+ * logo green are fills only; use accent-700 / support-700 for text. Contrast is checked in
+ * tests/unit/palette.test.ts. Never hard-code colors elsewhere.
+ */
 @theme {
-  --color-brand-50: #eef7f1;
-  --color-brand-100: #d5ecdc;
-  --color-brand-600: #1f7a4d;
-  --color-brand-700: #17613d;
-  --color-brand-800: #124d31;
-  --color-accent-400: #f2a93b;
-  --color-accent-500: #e08e1b;
+  /* Primary: slate navy (brand-700 is the logo's navy) */
+  --color-brand-50: #f3f5f8;
+  --color-brand-100: #e1e6ee;
+  --color-brand-200: #c3ccda;
+  --color-brand-600: #3b506c;
+  --color-brand-700: #304159;
+  --color-brand-800: #243247;
+  --color-brand-900: #182233;
+
+  /* Accent: orange (accent-500 is the logo's orange) */
+  --color-accent-400: #f7a440;
+  --color-accent-500: #ef8f21;
+  --color-accent-700: #b45309;
+
+  /* Supporting: green (support-600 is the logo's green) */
+  --color-support-600: #99c34d;
+  --color-support-700: #4f7a1e;
+
   --color-whatsapp: #0e7a40;
-  --color-ink: #1c2421;
-  --color-muted: #55615b;
+  --color-ink: #1b2433;
+  --color-muted: #4b5563;
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -24,10 +40,15 @@ body {
   color: var(--color-ink);
 }
 
-/* Visible keyboard focus everywhere. */
+/* Visible keyboard focus everywhere: dark orange on light areas, light orange on dark navy areas. */
 :focus-visible {
-  outline: 3px solid var(--color-accent-500);
+  outline: 3px solid var(--color-accent-700);
   outline-offset: 2px;
+}
+
+.on-dark :focus-visible,
+footer :focus-visible {
+  outline-color: var(--color-accent-400);
 }
 
 @media (prefers-reduced-motion: reduce) {

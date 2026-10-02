@@ -33,14 +33,14 @@ export const PAGE_TEXTS: PageTextDef[] = [
     "home.eyebrow",
     "home",
     "Inicio: texto sobre el título",
-    "Distribuidora de alimentos en Bolivia",
+    "Distribuidora de alimentos",
     80,
   ),
   def(
     "home.title",
     "home",
     "Inicio: título principal",
-    "{companyName}: alimentos para su negocio",
+    "{companyName}",
     120,
   ),
   def(

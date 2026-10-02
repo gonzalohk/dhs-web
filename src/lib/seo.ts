@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { COMPANY_FULL_NAME } from "./brand";
 import type { Faq, Settings } from "./types";
 
 export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(
@@ -25,6 +26,7 @@ export function localBusinessJsonLd(s: Settings) {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: s.companyName,
+    legalName: COMPANY_FULL_NAME,
     ...(s.tagline ? { description: s.tagline } : {}),
     url: siteUrl,
     telephone: s.phone,

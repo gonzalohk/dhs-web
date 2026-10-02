@@ -1,14 +1,18 @@
 import Link from "next/link";
 import { addressLine, formatBoPhone } from "@/lib/format";
 import type { Settings } from "@/lib/types";
+import { COMPANY_FULL_NAME } from "@/lib/brand";
 import { navLinks } from "./Header";
+import { Logo } from "./Logo";
 
 export function Footer({ settings }: { settings: Settings }) {
   return (
     <footer className="mt-16 bg-brand-800 pb-24 text-brand-50 md:pb-0">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 lg:grid-cols-3">
         <div>
-          <p className="text-lg font-bold text-white">{settings.companyName}</p>
+          <Logo variant="footer" name={settings.companyName} />
+          <p className="mt-4 text-lg font-bold text-white">{settings.companyName}</p>
+          <p className="text-sm">{COMPANY_FULL_NAME}</p>
           {settings.tagline && <p className="mt-2 text-sm">{settings.tagline}</p>}
         </div>
         <address className="text-sm not-italic">

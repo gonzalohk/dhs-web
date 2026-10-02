@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { StickyWhatsApp } from "@/components/WhatsAppButton";
 import { getSettings } from "@/lib/content";
+import { COMPANY_FULL_NAME } from "@/lib/brand";
 import { siteUrl } from "@/lib/seo";
 import "./globals.css";
 
@@ -19,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: settings.companyName, template: `%s | ${settings.companyName}` },
     description:
       settings.tagline ||
-      `${settings.companyName}: distribuidora de alimentos al por mayor en Bolivia.`,
+      `${settings.companyName} (${COMPANY_FULL_NAME}): distribuidora de alimentos al por mayor en Bolivia.`,
     openGraph: { siteName: settings.companyName, locale: "es_BO", type: "website" },
   };
 }

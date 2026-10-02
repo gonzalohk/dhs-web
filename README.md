@@ -290,6 +290,17 @@ Sign in at `/admin/login`. No developer is needed for day-to-day changes:
 Fields that still say `[Pendiente]` are hidden from the public site and listed on the dashboard
 (`/admin`). Changes appear on the public site within seconds.
 
+## Brand and logo
+
+- **DHS** stands for **Distribuidora Hernández Sanjinés** (`src/lib/brand.ts`).
+- **Palette**: taken from the logo (slate navy `#304159`, orange `#EF8F21`, lime green `#99C34D`) and defined only as
+  design tokens in `src/app/globals.css`. Logo orange and green are fills; text uses the darker `accent-700` and
+  `support-700`. `tests/unit/palette.test.ts` checks contrast.
+- **Logos** live in `src/assets/brand/`: `logo-dhs.svg` (vector, used in the footer), `logo-dhs.png` (transparent),
+  `logo-icon.png` (cube and hand, used in the header) and `source/logo-dhs-vector.ai` (Illustrator master).
+- **Tab icon and social preview**: `src/app/favicon.ico`, `icon.png`, `apple-icon.png`, `opengraph-image.png`,
+  generated from the logo.
+
 ## 11. Project structure
 
 ```text

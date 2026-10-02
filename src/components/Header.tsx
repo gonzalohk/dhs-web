@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Settings } from "@/lib/types";
+import { Logo } from "./Logo";
 import { WhatsAppButton } from "./WhatsAppButton";
 
 export const navLinks = [
@@ -15,18 +16,7 @@ export function Header({ settings }: { settings: Settings }) {
   return (
     <header className="sticky top-0 z-30 border-b border-brand-100 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <Link
-          href="/"
-          className="flex min-h-11 min-w-0 items-center gap-2 font-bold text-brand-700 sm:text-lg"
-        >
-          <span
-            aria-hidden="true"
-            className="grid size-9 shrink-0 place-items-center rounded-lg bg-brand-600 text-white"
-          >
-            {settings.companyName.charAt(0)}
-          </span>
-          <span className="truncate">{settings.companyName}</span>
-        </Link>
+        <Logo variant="header" name={settings.companyName} />
 
         <nav aria-label="Principal" className="hidden lg:block">
           <ul className="flex items-center gap-1">
