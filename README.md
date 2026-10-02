@@ -1,5 +1,6 @@
 # DHS food distribution website
 
+
 Website for DHS, a food distributor in Bolivia: company information, product catalog by category (with
 optional prices in Bs), WhatsApp-first contact, a contact form, and a protected staff area where the
 company edits its own data and content without a developer.
