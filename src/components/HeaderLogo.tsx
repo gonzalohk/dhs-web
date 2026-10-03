@@ -24,6 +24,7 @@ export function HeaderLogo({ name }: { name: string }) {
       ref={ref}
       src={logo}
       alt=""
+      sizes="96px"
       priority
       onError={() => setFailed(true)}
       className="h-11 w-auto shrink-0 sm:h-12"

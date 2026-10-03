@@ -30,7 +30,7 @@ export function Logo({ variant, name = "DHS" }: Props) {
   }
   return (
     <Link href="/" aria-label={label} className="inline-block rounded-2xl bg-white p-4 shadow-sm">
-      <Image src={logoFooter} alt="" sizes="176px" className="h-auto w-44" />
+      <Image src={logoFooter} alt="" sizes="176px" loading="eager" className="h-auto w-44" />
     </Link>
   );
 }

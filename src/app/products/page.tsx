@@ -38,12 +38,7 @@ export default async function ProductsPage() {
       <PageHeader title="Productos" intro={pageText(texts, "products.intro", settings)} />
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-12 sm:grid-cols-2 lg:grid-cols-3">
         {catalog.map((category, i) => (
-          <CategoryCard
-            key={category.id}
-            category={category}
-            priority={i === 0}
-            headingLevel="h2"
-          />
+          <CategoryCard key={category.id} category={category} priority={i < 3} headingLevel="h2" />
         ))}
       </div>
     </>
