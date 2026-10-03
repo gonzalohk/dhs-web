@@ -6,6 +6,7 @@ import { uploadImageAction } from "@/app/admin/content-actions";
 import { validateImage, type ImageEntity } from "@/lib/images";
 import { useEditor } from "./EditorForm";
 import { Field } from "./Field";
+import { BusyOverlay, Spinner } from "./Spinner";
 
 type Props = {
   entity: ImageEntity;
@@ -91,7 +92,14 @@ export function ImageField({ entity, initialPath, initialSrc, initialAlt = "" }:
           disabled={busy}
           className="min-h-11 rounded-full border-2 border-brand-600 px-5 font-semibold text-brand-700 hover:bg-brand-50 disabled:opacity-60"
         >
-          {busy ? "Subiendo…" : "Subir imagen"}
+          {busy ? (
+            <span className="inline-flex items-center gap-2">
+              <Spinner />
+              Subiendo…
+            </span>
+          ) : (
+            "Subir imagen"
+          )}
         </button>
         {path && (
           <button
@@ -106,6 +114,7 @@ export function ImageField({ entity, initialPath, initialSrc, initialAlt = "" }:
           </button>
         )}
       </div>
+      {busy && <BusyOverlay label="Subiendo imagen…" />}
       {message && (
         <p role="status" className="text-sm font-medium">
           {message}

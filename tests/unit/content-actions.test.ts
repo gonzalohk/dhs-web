@@ -287,7 +287,7 @@ describe("visibility, order, and deletion", () => {
     });
     expect(await deleteItem(deps, "category", "c1")).toMatchObject({
       ok: false,
-      formError: expect.stringContaining("productos"),
+      formError: expect.stringContaining("aún tiene 1 producto"),
     });
     expect(tables.categories.c1).toBeDefined();
   });

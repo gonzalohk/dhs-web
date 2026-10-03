@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { formatBoPhone } from "@/lib/format";
-import { staffClient } from "@/lib/supabase";
+import { requireStaff } from "@/lib/staff-session";
 import type { Inquiry, InquiryStatus } from "@/lib/types";
 import { setInquiryStatus } from "../actions";
 
@@ -18,9 +17,7 @@ const dateFormat = new Intl.DateTimeFormat("es-BO", {
 });
 
 export default async function InquiriesPage({ searchParams }: PageProps<"/admin/inquiries">) {
-  const supabase = await staffClient();
-  const { data: auth } = await supabase.auth.getUser();
-  if (!auth.user) redirect("/admin/login");
+  const { supabase } = await requireStaff();
 
   const status = (await searchParams).status;
   const active = status === "new" || status === "handled" ? status : "all";

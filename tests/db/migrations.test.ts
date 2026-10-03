@@ -231,3 +231,70 @@ describe("staff editing, change log, and optimistic locking", () => {
     expect(rows[0]?.row_id).toBe("home.title");
   });
 });
+
+describe("categories and products (staff)", () => {
+  it("lets staff create a category, associate a product with it, and move the product to another category", async () => {
+    const a = await as(
+      "authenticated",
+      STAFF,
+      "insert into categories (slug, name, description) values ('cat-a', 'A', 'a') returning id",
+    );
+    const b = await as(
+      "authenticated",
+      STAFF,
+      "insert into categories (slug, name, description) values ('cat-b', 'B', 'b') returning id",
+    );
+    const product = await as(
+      "authenticated",
+      STAFF,
+      "insert into products (category_id, name, description) values ($1, 'P', 'p') returning id, category_id",
+      [a.rows[0].id],
+    );
+    expect(product.rows[0].category_id).toBe(a.rows[0].id);
+    const moved = await as(
+      "authenticated",
+      STAFF,
+      "update products set category_id = $1 where id = $2 returning category_id",
+      [b.rows[0].id, product.rows[0].id],
+    );
+    expect(moved.rows[0].category_id).toBe(b.rows[0].id);
+  });
+
+  it("reports a duplicate slug as a unique violation (code 23505)", async () => {
+    await as(
+      "authenticated",
+      STAFF,
+      "insert into categories (slug, name, description) values ('dup', 'D', 'd')",
+    );
+    await expect(
+      as(
+        "authenticated",
+        STAFF,
+        "insert into categories (slug, name, description) values ('dup', 'D2', 'd2')",
+      ),
+    ).rejects.toMatchObject({ code: "23505" });
+  });
+
+  it("deletes a category together with its products and logs every deletion", async () => {
+    const c = await as(
+      "authenticated",
+      STAFF,
+      "insert into categories (slug, name, description) values ('to-delete', 'X', 'x') returning id",
+    );
+    const p = await as(
+      "authenticated",
+      STAFF,
+      "insert into products (category_id, name, description) values ($1, 'PX', 'px') returning id",
+      [c.rows[0].id],
+    );
+    await as("authenticated", STAFF, "delete from categories where id = $1", [c.rows[0].id]);
+    expect(
+      (await db.query("select 1 from products where id = $1", [p.rows[0].id])).rows,
+    ).toHaveLength(0);
+    const logged = await db.query<{ table_name: string }>(
+      "select table_name from content_changes where op = 'delete' and row_id in ($1, $2)",
+      [c.rows[0].id, p.rows[0].id],
+    );
+    expect(logged.rows.map((r) => r.table_name).sort()).toEqual(["categories", "products"]);
+  });
+});

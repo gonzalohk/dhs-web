@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { changeInquiryStatus } from "@/lib/admin";
 import { isSupabaseConfigured, staffClient } from "@/lib/supabase";
+import { getStaff } from "@/lib/staff-session";
 
 export async function signIn(formData: FormData) {
   if (!isSupabaseConfigured()) redirect("/admin/login?error=config");
@@ -22,10 +23,11 @@ export async function signOut() {
 }
 
 export async function setInquiryStatus(id: string, status: string) {
-  const supabase = await staffClient();
+  const staff = await getStaff();
+  const supabase = staff?.supabase ?? (await staffClient());
   const result = await changeInquiryStatus(
     {
-      getUserId: async () => (await supabase.auth.getUser()).data.user?.id ?? null,
+      getUserId: async () => staff?.id ?? null,
       update: async (inquiryId, patch) => {
         const { error } = await supabase.from("inquiries").update(patch).eq("id", inquiryId);
         if (error) throw error;

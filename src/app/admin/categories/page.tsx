@@ -11,9 +11,17 @@ import { saveItemAction } from "../content-actions";
 export default async function CategoriesPage({ searchParams }: PageProps<"/admin/categories">) {
   const { supabase } = await requireStaff();
   const params = await searchParams;
-  const { data, error } = await supabase.from("categories").select("*").order("sort_order");
-  if (error) throw error;
-  const categories = data.map(mapCategory);
+  const [cats, prods] = await Promise.all([
+    supabase.from("categories").select("*").order("sort_order"),
+    supabase.from("products").select("category_id"),
+  ]);
+  if (cats.error) throw cats.error;
+  if (prods.error) throw prods.error;
+  const categories = cats.data.map(mapCategory);
+  const productCount = new Map<string, number>();
+  for (const row of prods.data) {
+    productCount.set(row.category_id, (productCount.get(row.category_id) ?? 0) + 1);
+  }
   const editing = categories.find((c) => c.id === params.edit);
 
   return (
@@ -29,6 +37,7 @@ export default async function CategoriesPage({ searchParams }: PageProps<"/admin
             title: c.name,
             subtitle: c.description,
             published: c.published ?? true,
+            productCount: productCount.get(c.id) ?? 0,
           }))}
         />
       </div>

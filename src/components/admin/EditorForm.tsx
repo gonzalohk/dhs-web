@@ -2,6 +2,7 @@
 
 import { createContext, useActionState, useContext, useId, useState, type ReactNode } from "react";
 import type { ActionState } from "@/lib/content-service";
+import { SubmitButton } from "./SubmitButton";
 
 type EditorContextValue = {
   state: ActionState;
@@ -35,7 +36,7 @@ export function EditorForm({
   submitLabel = "Guardar cambios",
   children,
 }: Props) {
-  const [state, formAction, pending] = useActionState(action, null);
+  const [state, formAction] = useActionState(action, null);
   const [values, setValues] = useState(initialValues);
   const formId = useId();
   const version = state?.ok ? (state.updatedAt ?? updatedAt) : updatedAt;
@@ -79,13 +80,12 @@ export function EditorForm({
           </p>
         )}
 
-        <button
-          type="submit"
-          disabled={pending}
-          className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-brand-600 px-6 font-semibold text-white hover:bg-brand-700 disabled:opacity-60 sm:w-auto"
+        <SubmitButton
+          className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-brand-600 px-6 font-semibold text-white hover:bg-brand-700 sm:w-auto"
+          pendingLabel="Guardando cambios…"
         >
-          {pending ? "Guardando…" : submitLabel}
-        </button>
+          {submitLabel}
+        </SubmitButton>
       </form>
     </EditorContext.Provider>
   );

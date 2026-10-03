@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { redirect, unstable_rethrow } from "next/navigation";
 import {
   deleteItem,
   moveItem,
@@ -17,6 +17,7 @@ import {
 import type { Entity } from "@/lib/content-schemas";
 import { IMAGE_BUCKET, type ImageEntity } from "@/lib/images";
 import { isSupabaseConfigured, staffClient } from "@/lib/supabase";
+import { getStaff } from "@/lib/staff-session";
 import { supabaseContentDb } from "@/lib/supabase-content-db";
 
 // Server Actions of the staff editors (contracts/staff-editor.md). The rules live in
@@ -24,9 +25,10 @@ import { supabaseContentDb } from "@/lib/supabase-content-db";
 
 async function deps(): Promise<Deps> {
   if (!isSupabaseConfigured()) redirect("/admin/login?error=config");
-  const supabase = await staffClient();
+  const staff = await getStaff();
+  const supabase = staff?.supabase ?? (await staffClient());
   return {
-    getUserId: async () => (await supabase.auth.getUser()).data.user?.id ?? null,
+    getUserId: async () => staff?.id ?? null,
     db: supabaseContentDb(supabase),
     revalidateSite: () => revalidatePath("/", "layout"),
     uploadFile: async (path, bytes, contentType) => {
@@ -36,6 +38,32 @@ async function deps(): Promise<Deps> {
       if (error) throw error;
     },
   };
+}
+
+/** Turns a database error into a message staff can act on (the raw error goes to the server log). */
+function friendly(error: unknown): string {
+  console.error("Staff action failed", error);
+  const code =
+    typeof error === "object" && error && "code" in error
+      ? String((error as { code: unknown }).code)
+      : "";
+  if (code === "23505")
+    return "Ya existe un elemento con ese valor (por ejemplo la misma dirección web). Use otro.";
+  if (code === "23503")
+    return "No se pudo guardar porque falta o ya no existe un elemento relacionado (por ejemplo la categoría). Recargue la página.";
+  if (code === "42501")
+    return "Su cuenta no tiene permiso para esta acción. Pida acceso de personal.";
+  return "No se pudo completar la acción. Inténtelo de nuevo.";
+}
+
+/** Runs a service call; a database failure becomes an error state instead of a crashed page. */
+async function safe(run: () => Promise<ActionState>): Promise<ActionState> {
+  try {
+    return await run();
+  } catch (error) {
+    unstable_rethrow(error); // let redirects and other Next.js control-flow errors through
+    return { ok: false, formError: friendly(error) };
+  }
 }
 
 /** Sends signed-out callers to the sign-in page; otherwise returns the state for the form. */
@@ -54,11 +82,11 @@ export async function saveCompanyAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  return finish(await saveCompany(await deps(), fields(formData)));
+  return finish(await safe(async () => saveCompany(await deps(), fields(formData))));
 }
 
 export async function saveTextAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
-  return finish(await saveText(await deps(), fields(formData)));
+  return finish(await safe(async () => saveText(await deps(), fields(formData))));
 }
 
 export async function saveItemAction(
@@ -66,7 +94,7 @@ export async function saveItemAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  return finish(await saveItem(await deps(), entity, fields(formData)));
+  return finish(await safe(async () => saveItem(await deps(), entity, fields(formData))));
 }
 
 /** Direct call from the image field: returns the uploaded path, or an error message. */
@@ -95,7 +123,10 @@ export async function setVisibilityAction(
   published: boolean,
   returnTo: string,
 ) {
-  backWithError(returnTo, await setVisibility(await deps(), entity, id, published));
+  backWithError(
+    returnTo,
+    await safe(async () => setVisibility(await deps(), entity, id, published)),
+  );
 }
 
 export async function moveItemAction(
@@ -104,11 +135,11 @@ export async function moveItemAction(
   direction: "up" | "down",
   returnTo: string,
 ) {
-  backWithError(returnTo, await moveItem(await deps(), entity, id, direction));
+  backWithError(returnTo, await safe(async () => moveItem(await deps(), entity, id, direction)));
 }
 
 export async function deleteItemAction(entity: Entity, id: string, returnTo: string) {
-  backWithError(returnTo, await deleteItem(await deps(), entity, id));
+  backWithError(returnTo, await safe(async () => deleteItem(await deps(), entity, id)));
 }
 
 export async function restoreChangeAction(changeId: string) {

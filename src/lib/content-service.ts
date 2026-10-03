@@ -220,19 +220,24 @@ export async function moveItem(
     return { ok: false, formError: "Este elemento no se puede ordenar." };
   const table = TABLES[entity];
   const updates = swapOrder(await deps.db.listOrder(table), id, direction);
-  for (const u of updates) await deps.db.updateRow(table, u.id, { sort_order: u.sortOrder });
+  await Promise.all(
+    updates.map((u) => deps.db.updateRow(table, u.id, { sort_order: u.sortOrder })),
+  );
   if (updates.length > 0) deps.revalidateSite();
   return { ok: true };
 }
 
+/** Deletes an item. A category that still has products cannot be deleted (move or delete them first). */
 export async function deleteItem(deps: Deps, entity: Entity, id: string): Promise<ActionState> {
   if (!(await authorized(deps))) return UNAUTHORIZED;
-  if (entity === "category" && (await deps.db.countWhere("products", "category_id", id)) > 0) {
-    return {
-      ok: false,
-      formError:
-        "No se puede eliminar una categoría que tiene productos. Elimine o mueva los productos primero.",
-    };
+  if (entity === "category") {
+    const count = await deps.db.countWhere("products", "category_id", id);
+    if (count > 0) {
+      return {
+        ok: false,
+        formError: `No se puede eliminar la categoría porque aún tiene ${count} producto${count === 1 ? "" : "s"} asociado${count === 1 ? "" : "s"}. Elimine esos productos o muévalos a otra categoría primero.`,
+      };
+    }
   }
   await deps.db.deleteRow(TABLES[entity], id);
   deps.revalidateSite();

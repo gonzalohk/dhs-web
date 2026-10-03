@@ -20,8 +20,9 @@ export async function proxy(request: NextRequest) {
         },
       },
     });
-    const { data } = await supabase.auth.getUser();
-    signedIn = Boolean(data.user);
+    // getClaims verifies the token locally (no Auth server round trip) and refreshes an expired session.
+    const { data } = await supabase.auth.getClaims();
+    signedIn = Boolean(data?.claims?.sub);
   }
 
   if (!signedIn && !isLogin) return NextResponse.redirect(new URL("/admin/login", request.url));
