@@ -133,12 +133,11 @@ describe("authorization (SC-007)", () => {
       setVisibility(deps, "product", "p1", false),
       moveItem(deps, "product", "p1", "up"),
       deleteItem(deps, "product", "p1"),
-      uploadImage(
-        deps,
-        "products",
-        { type: "image/png", size: 10, arrayBuffer: async () => new ArrayBuffer(1) },
-        "alt",
-      ),
+      uploadImage(deps, "products", {
+        type: "image/png",
+        size: 10,
+        arrayBuffer: async () => new ArrayBuffer(1),
+      }),
       restoreChange(deps, "ch1"),
     ]);
     for (const result of results) expect(result).toEqual({ ok: false, unauthorized: true });
@@ -302,29 +301,26 @@ describe("uploadImage", () => {
 
   it("uploads a valid image and returns its path", async () => {
     const { deps } = setup();
-    const result = await uploadImage(deps, "products", file("image/png", 1000), "Tomates rojos");
+    const result = await uploadImage(deps, "products", file("image/png", 1000));
     expect(result).toMatchObject({ ok: true, path: expect.stringMatching(/^products\/.+\.png$/) });
     expect(deps.uploadFile).toHaveBeenCalledOnce();
   });
 
   it("rejects 6 MB files and PDFs with a clear message, uploading nothing", async () => {
     const { deps } = setup();
-    expect(
-      await uploadImage(deps, "products", file("image/png", 6 * 1024 * 1024), "x"),
-    ).toMatchObject({ formError: expect.stringContaining("grande") });
-    expect(await uploadImage(deps, "products", file("application/pdf", 10), "x")).toMatchObject({
+    expect(await uploadImage(deps, "products", file("image/png", 6 * 1024 * 1024))).toMatchObject({
+      formError: expect.stringContaining("grande"),
+    });
+    expect(await uploadImage(deps, "products", file("application/pdf", 10))).toMatchObject({
       formError: expect.stringContaining("JPG"),
     });
     expect(deps.uploadFile).not.toHaveBeenCalled();
   });
 
-  it("requires alt text and reports upload failures without changing anything", async () => {
+  it("reports upload failures without changing anything", async () => {
     const { deps } = setup();
-    expect(await uploadImage(deps, "products", file("image/png", 10), " ")).toMatchObject({
-      errors: { imageAlt: expect.any(String) },
-    });
     deps.uploadFile = vi.fn(async () => Promise.reject(new Error("storage down")));
-    expect(await uploadImage(deps, "products", file("image/png", 10), "alt")).toMatchObject({
+    expect(await uploadImage(deps, "products", file("image/png", 10))).toMatchObject({
       ok: false,
       formError: expect.stringContaining("imagen actual"),
     });

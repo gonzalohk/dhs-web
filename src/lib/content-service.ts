@@ -248,17 +248,10 @@ export async function uploadImage(
   deps: Deps,
   entity: ImageEntity,
   file: { type: string; size: number; arrayBuffer: () => Promise<ArrayBuffer> },
-  alt: string,
 ): Promise<ActionState> {
   if (!(await authorized(deps))) return UNAUTHORIZED;
   const problem = validateImage(file);
   if (problem) return { ok: false, formError: problem };
-  if (!alt.trim()) {
-    return {
-      ok: false,
-      errors: { imageAlt: "Texto alternativo de la imagen: este campo es obligatorio." },
-    };
-  }
   const path = buildImagePath(entity, file.type, crypto.randomUUID());
   try {
     await deps.uploadFile(path, await file.arrayBuffer(), file.type);

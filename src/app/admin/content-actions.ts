@@ -106,7 +106,7 @@ export async function uploadImageAction(
   if (!(file instanceof File) || file.size === 0) {
     return { ok: false, formError: "Elija una imagen para subir." };
   }
-  return finish(await uploadImage(await deps(), entity, file, String(formData.get("alt") ?? "")));
+  return finish(await uploadImage(await deps(), entity, file));
 }
 
 /** The list actions below are used as <form action>; problems are shown through ?error= on the page. */

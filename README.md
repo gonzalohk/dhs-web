@@ -304,6 +304,13 @@ Fields that still say `[Pendiente]` are hidden from the public site and listed o
 - **Tab icon and social preview**: `src/app/favicon.ico`, `icon.png`, `apple-icon.png`, `opengraph-image.png`,
   generated from the logo.
 
+### Image upload
+
+Images chosen in the staff editors are optimized **in the browser before upload** (`src/lib/image-optimize.ts`):
+scaled down to at most 1600 px on the longest side and re-encoded as WebP (quality 0.82). Originals of up to
+25 MB can be chosen; the file sent to the server is typically a few hundred KB (a 6 MB photo became about
+160 KB in testing) and must be at most 5 MB. The server still validates type and size.
+
 ## 11. Project structure
 
 ```text

@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { uploadImageAction } from "@/app/admin/content-actions";
-import { validateImage, type ImageEntity } from "@/lib/images";
+import { validateImage, IMAGE_TYPES, type ImageEntity } from "@/lib/images";
+import { MAX_ORIGINAL_BYTES, formatBytes, optimizeImage } from "@/lib/image-optimize";
 import { useEditor } from "./EditorForm";
 import { Field } from "./Field";
 import { BusyOverlay, Spinner } from "./Spinner";
@@ -20,36 +21,61 @@ type Props = {
 export function ImageField({ entity, initialPath, initialSrc, initialAlt = "" }: Props) {
   const [path, setPath] = useState(initialPath ?? "");
   const [src, setSrc] = useState(initialSrc ?? "");
-  const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<{ text: string; error: boolean } | null>(null);
   const [busy, setBusy] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
   const { formId } = useEditor();
 
-  async function upload() {
-    const file = fileRef.current?.files?.[0];
-    const altInput = fileRef.current?.form?.elements.namedItem(
-      "imageAlt",
-    ) as HTMLInputElement | null;
-    const alt = altInput?.value ?? "";
-    if (!file) return setMessage("Elija una imagen para subir.");
-    const problem = validateImage(file);
-    if (problem) return setMessage(problem);
-    if (!alt.trim()) return setMessage("Escriba primero el texto alternativo de la imagen.");
+  /** Uploads the chosen file right away (choosing a file is the click that starts the upload). */
+  async function upload(event: React.ChangeEvent<HTMLInputElement>) {
+    const input = event.currentTarget;
+    const file = input.files?.[0];
+    if (!file) return;
+    if (!(file.type in IMAGE_TYPES)) {
+      input.value = "";
+      return setMessage({
+        text: "El archivo debe ser una imagen JPG, PNG, WebP o AVIF.",
+        error: true,
+      });
+    }
+    if (file.size > MAX_ORIGINAL_BYTES) {
+      input.value = "";
+      return setMessage({
+        text: "La imagen es demasiado grande. El máximo es 25 MB.",
+        error: true,
+      });
+    }
 
     setBusy(true);
     setMessage(null);
-    const data = new FormData();
-    data.set("file", file);
-    data.set("alt", alt);
-    const result = await uploadImageAction(entity, data);
-    setBusy(false);
-    if (result?.ok && result.path) {
-      setPath(result.path);
-      setSrc(result.url ?? "");
-      setMessage("Imagen subida. Recuerde guardar los cambios.");
-      if (fileRef.current) fileRef.current.value = "";
-    } else if (result && !result.ok) {
-      setMessage(result.formError ?? result.errors?.imageAlt ?? "No se pudo subir la imagen.");
+    try {
+      // Reduce the image in the browser first: smaller upload, less storage, faster pages.
+      const { file: optimized, originalBytes, optimizedBytes } = await optimizeImage(file);
+      const problem = validateImage(optimized);
+      if (problem) return setMessage({ text: problem, error: true });
+
+      const data = new FormData();
+      data.set("file", optimized);
+      const result = await uploadImageAction(entity, data);
+      if (result?.ok && result.path) {
+        setPath(result.path);
+        setSrc(result.url ?? "");
+        const saved =
+          optimizedBytes < originalBytes
+            ? `Imagen optimizada (${formatBytes(originalBytes)} → ${formatBytes(optimizedBytes)}) y subida.`
+            : "Imagen subida.";
+        setMessage({ text: `${saved} Escriba su descripción y guarde los cambios.`, error: false });
+      } else if (result && !result.ok) {
+        setMessage({ text: result.formError ?? "No se pudo subir la imagen.", error: true });
+      }
+    } catch (error) {
+      console.error("Image upload failed", error);
+      setMessage({
+        text: "No se pudo subir la imagen. Revise su conexión e inténtelo de nuevo (máximo 5 MB).",
+        error: true,
+      });
+    } finally {
+      input.value = "";
+      setBusy(false);
     }
   }
 
@@ -64,6 +90,7 @@ export function ImageField({ entity, initialPath, initialSrc, initialAlt = "" }:
           alt="Imagen actual"
           width={160}
           height={100}
+          unoptimized
           className="h-24 w-40 rounded-lg object-cover"
         />
       )}
@@ -71,42 +98,41 @@ export function ImageField({ entity, initialPath, initialSrc, initialAlt = "" }:
         name="imageAlt"
         label="Texto alternativo (describe la imagen)"
         initial={initialAlt}
-        hint="Se usa para accesibilidad y buscadores."
+        hint="Describa lo que muestra la imagen. Es obligatoria para guardar y ayuda a la accesibilidad y a los buscadores."
       />
-      <div>
-        <label htmlFor={`${formId}-file`} className="font-medium">
-          Archivo (JPG, PNG, WebP o AVIF, máximo 5 MB)
-        </label>
-        <input
-          ref={fileRef}
-          id={`${formId}-file`}
-          type="file"
-          accept="image/jpeg,image/png,image/webp,image/avif"
-          className="mt-1 block w-full min-h-11"
-        />
-      </div>
-      <div className="flex flex-wrap gap-3">
-        <button
-          type="button"
-          onClick={upload}
-          disabled={busy}
-          className="min-h-11 rounded-full border-2 border-brand-600 px-5 font-semibold text-brand-700 hover:bg-brand-50 disabled:opacity-60"
+      <div className="flex flex-wrap items-center gap-3">
+        {/* The label is the button: clicking it opens the file picker, and choosing a file uploads it. */}
+        <label
+          htmlFor={`${formId}-file`}
+          className={`inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border-2 border-brand-600 px-5 font-semibold text-brand-700 hover:bg-brand-50 focus-within:outline focus-within:outline-3 ${busy ? "pointer-events-none opacity-60" : ""}`}
         >
           {busy ? (
-            <span className="inline-flex items-center gap-2">
+            <>
               <Spinner />
-              Subiendo…
-            </span>
+              Optimizando y subiendo…
+            </>
           ) : (
-            "Subir imagen"
+            <>{path ? "Cambiar imagen" : "Elegir y subir imagen"}</>
           )}
-        </button>
+          <input
+            id={`${formId}-file`}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/avif"
+            onChange={upload}
+            disabled={busy}
+            className="sr-only"
+          />
+        </label>
+        <span className="text-sm text-muted">
+          JPG, PNG, WebP o AVIF. Se optimiza automáticamente antes de subirla (máximo 25 MB).
+        </span>
         {path && (
           <button
             type="button"
             onClick={() => {
               setPath("");
               setSrc("");
+              setMessage(null);
             }}
             className="min-h-11 rounded-full border border-gray-400 px-5"
           >
@@ -114,10 +140,13 @@ export function ImageField({ entity, initialPath, initialSrc, initialAlt = "" }:
           </button>
         )}
       </div>
-      {busy && <BusyOverlay label="Subiendo imagen…" />}
+      {busy && <BusyOverlay label="Optimizando y subiendo imagen…" />}
       {message && (
-        <p role="status" className="text-sm font-medium">
-          {message}
+        <p
+          role={message.error ? "alert" : "status"}
+          className={`rounded-lg p-3 text-sm font-medium ${message.error ? "bg-red-50 text-red-800" : "bg-brand-50 text-brand-800"}`}
+        >
+          {message.text}
         </p>
       )}
     </fieldset>
