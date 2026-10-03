@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import logoHeader from "@/assets/brand/logo-header.png";
+import logo from "@/assets/brand/logo-header.png";
 
 /**
- * The header logo mark. The company name is shown as text only when the image fails to load, so the header
+ * The DHS logo mark (cube, arrows and hand, without the name; the footer shows the full logo). The company name is shown as text only when the image fails to load, so the header
  * stays clean in the normal case and never ends up empty.
  */
 export function HeaderLogo({ name }: { name: string }) {
@@ -22,11 +22,11 @@ export function HeaderLogo({ name }: { name: string }) {
   return (
     <Image
       ref={ref}
-      src={logoHeader}
+      src={logo}
       alt=""
       priority
       onError={() => setFailed(true)}
-      className="h-11 w-auto shrink-0"
+      className="h-11 w-auto shrink-0 sm:h-12"
     />
   );
 }

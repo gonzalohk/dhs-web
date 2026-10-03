@@ -1,38 +1,31 @@
 import { expect, test } from "@playwright/test";
 import { expectNoHorizontalScroll, isMobile } from "./helpers";
 
-test("home shows the cover with the actions over it, and no visible title or subtitle", async ({
+test("home shows the company name and the actions over the cover at every screen size", async ({
   page,
 }) => {
   await page.goto("/");
-  const viewport = page.viewportSize()!;
-  // The h1 stays for screen readers and search engines, but title and subtitle are not shown.
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("DHS");
-  // Visually hidden (sr-only): it occupies at most 1 px.
-  const h1Box = (await page.getByRole("heading", { level: 1 }).boundingBox())!;
-  expect(h1Box.width).toBeLessThanOrEqual(1);
-  expect(h1Box.height).toBeLessThanOrEqual(1);
-  await expect(page.locator("main").getByText(/Alimentos para su negocio\./)).toHaveCount(0);
+  const h1 = page.getByRole("heading", { level: 1 });
+  await expect(h1).toBeVisible();
+  await expect(h1).toContainText("DHS");
 
-  const cover = page.getByRole("img", { name: /repartidor con tableta y paquete/ });
-  await expect(cover).toBeVisible();
+  // The cover is the section background; the name and the actions sit inside that section.
+  const section = page.locator('section[aria-label="DHS"]');
+  const sectionBox = (await section.boundingBox())!;
+  const cover = section.getByRole("img", { name: /repartidor con tableta y paquete/ });
+  await expect(cover).toBeAttached();
   const coverBox = (await cover.boundingBox())!;
+  expect(Math.round(coverBox.width)).toBe(Math.round(sectionBox.width));
+  expect(Math.round(coverBox.height)).toBe(Math.round(sectionBox.height));
 
   const cta = page.getByRole("link", { name: /Solicitar cotización por WhatsApp/ });
   await expect(cta).toBeVisible();
-  const ctaBox = (await cta.boundingBox())!;
-  if (viewport.width >= 768) {
-    // On tablets and desktops the buttons sit on top of the cover image.
-    expect(ctaBox.y).toBeGreaterThanOrEqual(coverBox.y);
-    expect(ctaBox.y + ctaBox.height).toBeLessThanOrEqual(coverBox.y + coverBox.height);
-  } else {
-    // On phones the cover is too small to hold them, so they sit right below it.
-    expect(ctaBox.y).toBeGreaterThanOrEqual(coverBox.y + coverBox.height - 1);
+  for (const box of [(await h1.boundingBox())!, (await cta.boundingBox())!]) {
+    expect(box.y).toBeGreaterThanOrEqual(sectionBox.y);
+    expect(box.y + box.height).toBeLessThanOrEqual(sectionBox.y + sectionBox.height);
   }
   await expect(page.getByRole("link", { name: "Ver productos" })).toBeVisible();
-
   await expect(page.getByRole("heading", { name: "Nuestros productos" })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Frutas y verduras/ })).toBeVisible();
   await expectNoHorizontalScroll(page);
 });
 

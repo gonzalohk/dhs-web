@@ -25,7 +25,13 @@ export async function generateMetadata() {
 }
 
 /** The two main actions of the first screen. */
-function HeroActions({ phone }: { phone: string }) {
+function HeroActions({
+  phone,
+  variant = "default",
+}: {
+  phone: string;
+  variant?: "default" | "on-image";
+}) {
   return (
     <>
       <WhatsAppButton
@@ -35,7 +41,11 @@ function HeroActions({ phone }: { phone: string }) {
       />
       <Link
         href="/products"
-        className="inline-flex min-h-11 items-center justify-center rounded-full border-2 border-brand-600 px-5 py-2.5 font-semibold text-brand-700 hover:bg-brand-50"
+        className={`inline-flex min-h-11 items-center justify-center rounded-full border-2 px-5 py-2.5 font-semibold ${
+          variant === "on-image"
+            ? "border-white text-white hover:bg-white/15"
+            : "border-brand-600 text-brand-700 hover:bg-brand-50"
+        }`}
       >
         Ver productos
       </Link>
@@ -62,14 +72,35 @@ export default async function HomePage() {
       <JsonLd data={localBusinessJsonLd(settings)} />
 
       {cover ? (
-        /* The cover is a finished design (logo, delivery person, brand shapes) shown whole and full width,
-           with the actions over it. Title and subtitle are not shown (the h1 stays for screen readers and
-           search engines). Without a cover (see src/content/cover.ts) the text hero below is used. */
-        <section aria-label="DHS" className="relative bg-brand-50">
-          <h1 className="sr-only">{t("home.title")}</h1>
-          <Image src={cover} alt={COVER_ALT} priority sizes="100vw" className="h-auto w-full" />
-          <div className="flex flex-col gap-3 px-4 py-5 sm:flex-row md:absolute md:bottom-[5%] md:left-[4%] md:rounded-full md:bg-white/90 md:p-2 md:shadow-lg">
-            <HeroActions phone={settings.whatsappNumber} />
+        /* The cover is the section background: the photo fills the section and adapts to its size, with a
+           navy layer on top so the company name and the actions stay readable at every screen size.
+           Without a cover (see src/content/cover.ts) the text-only hero below is used. */
+        <section aria-label="DHS" className="on-dark relative isolate overflow-hidden bg-brand-900">
+          <Image
+            src={cover}
+            alt={COVER_ALT}
+            fill
+            priority
+            sizes="100vw"
+            className="-z-20 object-cover object-[center_15%]"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 -z-10 bg-gradient-to-r from-brand-900/90 via-brand-900/70 to-brand-900/35"
+          />
+          <div className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
+            {t("home.eyebrow") && (
+              <p className="font-semibold text-accent-400">{t("home.eyebrow")}</p>
+            )}
+            <h1 className="mt-2 max-w-3xl text-4xl font-bold tracking-tight text-white sm:text-6xl">
+              {t("home.title")}
+            </h1>
+            {settings.tagline && (
+              <p className="mt-4 max-w-2xl text-lg text-brand-100">{settings.tagline}</p>
+            )}
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <HeroActions phone={settings.whatsappNumber} variant="on-image" />
+            </div>
           </div>
         </section>
       ) : (

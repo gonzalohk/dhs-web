@@ -295,8 +295,8 @@ Fields that still say `[Pendiente]` are hidden from the public site and listed o
 - **Palette**: taken from the logo (slate navy `#304159`, orange `#EF8F21`, lime green `#99C34D`) and defined only as
   design tokens in `src/app/globals.css`. Logo orange and green are fills; text uses the darker `accent-700` and
   `support-700`. `tests/unit/palette.test.ts` checks contrast.
-- **Logos and cover** live in `src/assets/brand/`: `logo-header.png` (logo mark, used in the header),
-  `logo-footer.png` (full logo, used in the footer inside a white container), `portada.jpg` (the home page cover,
+- **Logos and cover** live in `src/assets/brand/`: `logo-header.png` (logo mark without the name, used in the header) and
+  `logo-footer.png` (the full logo, used in the footer inside a white container), `portada.jpg` (the home page cover,
   2400 px wide) and `source/logo-dhs-vector.ai` (Illustrator master).
 - **Home cover**: configured in `src/content/cover.ts`. With a cover, the action buttons sit over the image (below it
   on phones) and the title and subtitle are not shown (the `h1` stays for screen readers and search engines). Set
