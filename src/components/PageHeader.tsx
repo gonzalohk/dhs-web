@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Reveal } from "./Reveal";
 
 type Props = {
   title: string;
@@ -24,8 +25,12 @@ export function PageHeader({ title, intro, breadcrumb }: Props) {
             </ol>
           </nav>
         )}
-        <h1 className="text-3xl font-bold tracking-tight text-brand-800 sm:text-4xl">{title}</h1>
-        {intro && <p className="mt-3 max-w-2xl text-lg text-muted">{intro}</p>}
+        <Reveal stagger>
+          <h1 className="font-display text-3xl font-bold tracking-tight text-brand-800 sm:text-4xl">
+            {title}
+          </h1>
+          {intro && <p className="mt-3 max-w-2xl text-lg text-muted">{intro}</p>}
+        </Reveal>
       </div>
     </div>
   );
