@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import { Fraunces, Montserrat } from "next/font/google";
 import Script from "next/script";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { SmoothScroll } from "@/components/SmoothScroll";
 import { StickyWhatsApp } from "@/components/WhatsAppButton";
 import { getSettings } from "@/lib/content";
 import { COMPANY_FULL_NAME } from "@/lib/brand";
@@ -11,6 +12,13 @@ import "./globals.css";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+// Display serif for headings: adds an elegant, editorial feel to the big titles.
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
   display: "swap",
 });
@@ -32,8 +40,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const settings = await getSettings();
   return (
-    <html lang="es-BO" className={`${montserrat.variable} antialiased`}>
+    <html lang="es-BO" className={`${montserrat.variable} ${fraunces.variable} antialiased`}>
       <body className="flex min-h-dvh flex-col">
+        <SmoothScroll />
         <a
           href="#contenido"
           className="sr-only z-50 rounded-md bg-white px-4 py-2 focus:not-sr-only focus:fixed focus:top-2 focus:left-2"

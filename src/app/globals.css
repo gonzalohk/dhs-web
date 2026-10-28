@@ -29,10 +29,28 @@
   --color-ink: #1b2433;
   --color-muted: #4b5563;
   --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  /* Display serif for headings (utility: font-display). */
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Lenis smooth scroll (see SmoothScroll.tsx). When active it drives scrolling itself, so the
+   native behavior is turned off; without JS or with reduced motion these classes never apply. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {
