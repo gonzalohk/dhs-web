@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Settings } from "@/lib/types";
+import { HeaderShadow } from "./HeaderShadow";
 import { Logo } from "./Logo";
 import { WhatsAppButton } from "./WhatsAppButton";
 
@@ -14,7 +15,8 @@ export const navLinks = [
 
 export function Header({ settings }: { settings: Settings }) {
   return (
-    <header className="sticky top-0 z-30 border-b border-brand-100 bg-white/95 backdrop-blur">
+    <header className="site-header sticky top-0 z-30 border-b border-transparent transition-[background-color,box-shadow,border-color] duration-300">
+      <HeaderShadow />
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <Logo variant="header" name={settings.companyName} />
 

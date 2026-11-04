@@ -2,6 +2,7 @@ import { ContactForm } from "@/components/ContactForm";
 import { MailIcon, PhoneIcon } from "@/components/icons";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHeader } from "@/components/PageHeader";
+import { Reveal } from "@/components/Reveal";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { getPageTexts, getSettings, pageText } from "@/lib/content";
 import { addressLine, formatBoPhone } from "@/lib/format";
@@ -29,9 +30,9 @@ export default async function ContactPage() {
           { name: "Contacto", path: "/contact" },
         ])}
       />
-      <PageHeader title="Contacto" intro={pageText(texts, "contact.intro", settings)} />
+      <PageHeader title="Contacto" intro={pageText(texts, "contact.intro", settings)} image={null} />
 
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 lg:grid-cols-2">
+      <Reveal stagger className="mx-auto grid max-w-6xl gap-10 px-4 py-12 lg:grid-cols-2">
         <div>
           <section aria-labelledby="whatsapp-title" className="rounded-2xl bg-brand-50 p-6">
             <h2 id="whatsapp-title" className="text-xl font-bold text-brand-800">
@@ -100,7 +101,7 @@ export default async function ContactPage() {
           </p>
           <ContactForm />
         </section>
-      </div>
+      </Reveal>
 
       <section
         id="privacidad"

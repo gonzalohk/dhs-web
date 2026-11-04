@@ -1,25 +1,30 @@
 import type { Metadata } from "next";
-import { Fraunces, Montserrat } from "next/font/google";
+import { Lora, Open_Sans } from "next/font/google";
 import Script from "next/script";
+import { BackToTop } from "@/components/BackToTop";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { SmoothScroll } from "@/components/SmoothScroll";
+import { Spinner } from "@/components/Spinner";
+import { TopBar } from "@/components/TopBar";
 import { StickyWhatsApp } from "@/components/WhatsAppButton";
 import { getSettings } from "@/lib/content";
 import { COMPANY_FULL_NAME } from "@/lib/brand";
 import { siteUrl } from "@/lib/seo";
 import "./globals.css";
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+// Body font (Foody template): Open Sans.
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
-// Display serif for headings: adds an elegant, editorial feel to the big titles.
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+// Display serif for headings (Foody template): Lora.
+const lora = Lora({
+  variable: "--font-lora",
   subsets: ["latin"],
+  weight: ["500", "600", "700"],
   display: "swap",
 });
 
@@ -40,21 +45,23 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const settings = await getSettings();
   return (
-    <html lang="es-BO" className={`${montserrat.variable} ${fraunces.variable} antialiased`}>
+    <html lang="es-BO" className={`${openSans.variable} ${lora.variable} antialiased`}>
       <body className="flex min-h-dvh flex-col">
-        <SmoothScroll />
+        <Spinner />
         <a
           href="#contenido"
           className="sr-only z-50 rounded-md bg-white px-4 py-2 focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
         >
           Saltar al contenido
         </a>
+        <TopBar settings={settings} />
         <Header settings={settings} />
         <main id="contenido" className="flex-1">
           {children}
         </main>
         <Footer settings={settings} />
         <StickyWhatsApp phone={settings.whatsappNumber} />
+        <BackToTop />
         {gtmId && (
           <Script id="gtm" strategy="afterInteractive">
             {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${gtmId}');`}

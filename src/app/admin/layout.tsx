@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:items-start lg:gap-8">
+    <div className="admin-scope mx-auto max-w-6xl px-4 py-8 lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:items-start lg:gap-8">
       <AdminNav />
       <div className="min-w-0">{children}</div>
     </div>

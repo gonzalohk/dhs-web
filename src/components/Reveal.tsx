@@ -1,12 +1,10 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import type { ElementType, ReactNode } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+// Layout effect on the client, plain effect on the server (avoids the SSR warning).
+const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 type RevealProps = {
   children: ReactNode;
@@ -22,51 +20,60 @@ type RevealProps = {
 };
 
 /**
- * Reveals its content with a gentle fade + slide as it scrolls into view, using GSAP's
- * ScrollTrigger. It is a client component, but the children are rendered on the server and
- * passed straight through, so the HTML (and SEO) is unaffected.
- *
- * The animation is set up inside useGSAP (a layout effect), so the start state is applied
- * before the browser paints — no flash of fully-visible content. If JavaScript never runs,
- * or the visitor prefers reduced motion, the content simply shows at rest.
+ * Fades its content up as it scrolls into view, in the style of the Foody template's WOW.js
+ * reveals — but with a tiny IntersectionObserver instead of a library. The start state is set
+ * in a layout effect (before paint), so there is no flash; if JavaScript never runs, or the
+ * visitor prefers reduced motion, the content simply shows at rest.
  */
 export function Reveal({
   children,
   as: Tag = "div",
   className,
-  y = 28,
+  y = 24,
   delay = 0,
   stagger = false,
 }: RevealProps) {
   const ref = useRef<HTMLElement>(null);
 
-  useGSAP(
-    () => {
-      const el = ref.current;
-      if (!el) return;
+  useIsoLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-      // Respect the visitor's motion preference: no animation, content stays put.
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const items = (stagger ? Array.from(el.children) : [el]) as HTMLElement[];
 
-      const targets = stagger ? Array.from(el.children) : el;
+    // Hidden start state (applied before paint).
+    items.forEach((node, i) => {
+      node.style.opacity = "0";
+      node.style.transform = `translateY(${y}px)`;
+      node.style.transition = "opacity .7s ease, transform .7s ease";
+      node.style.transitionDelay = `${delay + (stagger ? i * 0.12 : 0)}s`;
+      node.style.willChange = "opacity, transform";
+    });
 
-      gsap.from(targets, {
-        opacity: 0,
-        y,
-        duration: 0.8,
-        delay,
-        ease: "power3.out",
-        stagger: stagger ? 0.12 : 0,
-        scrollTrigger: {
-          trigger: el,
-          start: "top 85%",
-          // Play once when it first enters; leave it visible afterwards.
-          toggleActions: "play none none none",
-        },
+    const reveal = () => {
+      items.forEach((node) => {
+        node.style.opacity = "1";
+        node.style.transform = "none";
       });
-    },
-    { scope: ref },
-  );
+    };
+
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            reveal();
+            obs.disconnect();
+            break;
+          }
+        }
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+    );
+    io.observe(el);
+
+    return () => io.disconnect();
+  }, [y, delay, stagger]);
 
   return (
     <Tag ref={ref} className={className}>

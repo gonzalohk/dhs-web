@@ -1,5 +1,6 @@
 import { JsonLd } from "@/components/JsonLd";
 import { PageHeader } from "@/components/PageHeader";
+import { Reveal } from "@/components/Reveal";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { getFaqs, getPageTexts, getSettings, pageText } from "@/lib/content";
 import { breadcrumbJsonLd, buildMetadata, faqPageJsonLd } from "@/lib/seo";
@@ -35,7 +36,11 @@ export default async function FaqPage() {
         ])}
       />
       {faqs.length > 0 && <JsonLd data={faqPageJsonLd(faqs)} />}
-      <PageHeader title="Preguntas frecuentes" intro={pageText(texts, "faq.intro", settings)} />
+      <PageHeader
+        title="Preguntas frecuentes"
+        intro={pageText(texts, "faq.intro", settings)}
+        image={null}
+      />
       <div className="mx-auto max-w-3xl px-4 py-12">
         {faqs.length === 0 && (
           <p className="mb-10 text-muted">
@@ -47,7 +52,8 @@ export default async function FaqPage() {
           const items = faqs.filter((f) => f.topic === topic.id);
           if (items.length === 0) return null;
           return (
-            <section key={topic.id} aria-labelledby={`topic-${topic.id}`} className="mb-10">
+            <Reveal key={topic.id}>
+            <section aria-labelledby={`topic-${topic.id}`} className="mb-10">
               <h2 id={`topic-${topic.id}`} className="text-xl font-bold text-brand-800">
                 {topic.label}
               </h2>
@@ -68,6 +74,7 @@ export default async function FaqPage() {
                 ))}
               </div>
             </section>
+            </Reveal>
           );
         })}
         <div className="text-center">
