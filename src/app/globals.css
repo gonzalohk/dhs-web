@@ -28,34 +28,209 @@
   --color-whatsapp: #0e7a40;
   --color-ink: #1b2433;
   --color-muted: #4b5563;
-  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
-  /* Display serif for headings (utility: font-display). */
-  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  /* Body font: Open Sans (Foody template). */
+  --font-sans: var(--font-open-sans), ui-sans-serif, system-ui, sans-serif;
+  /* Display serif for headings: Lora (Foody template). Utility: font-display. */
+  --font-display: var(--font-lora), Georgia, "Times New Roman", serif;
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-/* Lenis smooth scroll (see SmoothScroll.tsx). When active it drives scrolling itself, so the
-   native behavior is turned off; without JS or with reduced motion these classes never apply. */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
 body {
   background: #ffffff;
   color: var(--color-ink);
+}
+
+/* Headings use the Lora display serif across the public site (Foody look). The admin panel
+   keeps the sans body font for a denser, utilitarian feel. */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+}
+.admin-scope :is(h1, h2, h3, h4) {
+  font-family: var(--font-sans);
+}
+
+/*
+ * Foody-style navbar: at the top it shares the light colour of the hero / page-header band (so
+ * it blends in); once scrolled (data-scrolled="true", set in HeaderShadow.tsx) it becomes a solid
+ * white bar with a shadow.
+ */
+.site-header {
+  background-color: var(--color-brand-50);
+}
+/* Home page, at the top: transparent so the hero photo shows behind the navbar (they fuse). */
+.site-header[data-home="true"]:not([data-scrolled="true"]) {
+  background-color: transparent;
+  border-color: transparent;
+}
+.site-header[data-scrolled="true"] {
+  background-color: rgb(255 255 255 / 0.95);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-color: var(--color-brand-100);
+  box-shadow:
+    0 1px 3px rgb(0 0 0 / 0.1),
+    0 1px 2px rgb(0 0 0 / 0.06);
+}
+
+/*
+ * Foody-style section heading accent: two short bars (green over orange) above a title.
+ * Add `section-bars` to the heading's wrapper; use `section-bars--start` to left-align them.
+ */
+.section-bars {
+  position: relative;
+  padding-top: 24px;
+}
+.section-bars::before,
+.section-bars::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.section-bars::before {
+  top: 0;
+  width: 60px;
+  background: var(--color-support-700);
+}
+.section-bars::after {
+  top: 9px;
+  width: 90px;
+  background: var(--color-accent-500);
+}
+.section-bars--start::before,
+.section-bars--start::after {
+  left: 0;
+  transform: none;
+}
+
+/*
+ * Soft dotted backdrop for light sections (Foody uses a repeating radial gradient). Pair with
+ * `bg-brand-50` so the dots read as a faint texture, never as noise over text.
+ */
+.bg-dots {
+  background-image: radial-gradient(var(--color-brand-200) 1px, transparent 1.5px);
+  background-size: 18px 18px;
+}
+
+/*
+ * Faint fruit & vegetable watermark from the Foody template (transparent PNG). Swap the file at
+ * public/foody/bg-icon.png to change it. Pairs with a light background underneath.
+ */
+.bg-veg {
+  background-image: url("/foody/veg-pattern.png");
+  background-repeat: repeat;
+  background-size: 300px auto;
+}
+
+/*
+ * Locomotive loading spinner (see Spinner.tsx). The overlay covers the page on first load and
+ * fades out when the `--hidden` class is added. The CSS `loco-autohide` animation hides it after
+ * a few seconds even if JavaScript never adds that class, so the page is never trapped.
+ */
+.loco-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  transition:
+    opacity 0.5s ease,
+    visibility 0s linear 0.5s;
+  animation: loco-autohide 0s linear 3s forwards;
+}
+.loco-overlay--hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+@keyframes loco-autohide {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+.loco-scene {
+  width: min(360px, 78vw);
+  text-align: center;
+}
+.loco-svg {
+  width: 100%;
+  height: auto;
+}
+.loco-text {
+  margin-top: 4px;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-brand-700);
+}
+.box-bob {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: box-bob 1s ease-in-out infinite alternate;
+}
+.box-shadow {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: box-shadow 1s ease-in-out infinite alternate;
+}
+@keyframes box-bob {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-12px);
+  }
+}
+@keyframes box-shadow {
+  from {
+    transform: scaleX(1);
+    opacity: 0.5;
+  }
+  to {
+    transform: scaleX(0.78);
+    opacity: 0.3;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .box-bob,
+  .box-shadow {
+    animation: none;
+  }
+}
+
+/*
+ * Text halo for titles sitting directly on a header photo: a soft white glow that keeps the dark
+ * text readable without dimming the image (so photos stay crisp, like the template).
+ */
+.text-halo,
+.text-halo :is(h1, h2, p) {
+  text-shadow:
+    0 1px 16px rgb(255 255 255 / 0.92),
+    0 1px 3px rgb(255 255 255 / 0.8);
+}
+
+/* Image hover-zoom used by product and category cards (Foody: scale 1.1 on hover). */
+.zoom-img {
+  overflow: hidden;
+}
+.zoom-img img {
+  transition: transform 0.5s ease;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .group:hover .zoom-img img,
+  .zoom-img:hover img {
+    transform: scale(1.08);
+  }
 }
 
 /* Visible keyboard focus everywhere: dark orange on light areas, light orange on dark navy areas. */

@@ -1,5 +1,6 @@
 import { JsonLd } from "@/components/JsonLd";
 import { PageHeader } from "@/components/PageHeader";
+import { Reveal } from "@/components/Reveal";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { getPageTexts, getSettings, pageText } from "@/lib/content";
 import { breadcrumbJsonLd, buildMetadata } from "@/lib/seo";
@@ -27,8 +28,12 @@ export default async function DeliveryPage() {
           { name: "Entregas y pedidos", path: "/delivery" },
         ])}
       />
-      <PageHeader title="Entregas y pedidos" intro={pageText(texts, "delivery.intro", settings)} />
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 lg:grid-cols-2">
+      <PageHeader
+        title="Entregas y pedidos"
+        intro={pageText(texts, "delivery.intro", settings)}
+        image={null}
+      />
+      <Reveal stagger className="mx-auto grid max-w-6xl gap-8 px-4 py-12 lg:grid-cols-2">
         {hasAreas && (
           <section
             aria-labelledby="areas-title"
@@ -91,7 +96,7 @@ export default async function DeliveryPage() {
             </ol>
           </section>
         )}
-      </div>
+      </Reveal>
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 sm:flex-row sm:justify-center">
         <WhatsAppButton
           phone={settings.whatsappNumber}

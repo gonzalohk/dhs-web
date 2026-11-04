@@ -1,5 +1,6 @@
 import { JsonLd } from "@/components/JsonLd";
 import { PageHeader } from "@/components/PageHeader";
+import { Reveal } from "@/components/Reveal";
 import { TrustSection } from "@/components/TrustSection";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { getPageTexts, getSettings, getTestimonials, pageText } from "@/lib/content";
@@ -35,10 +36,12 @@ export default async function AboutPage() {
           { name: "Nosotros", path: "/about" },
         ])}
       />
-      <PageHeader title={`Sobre ${settings.companyName}`} intro={settings.tagline} />
+      {/* Solo marca de agua por ahora. Para añadir una foto más adelante, cambia image={null}
+          por, por ejemplo, image="/foody/blog-1.jpg" imagePosition="center". */}
+      <PageHeader title={`Sobre ${settings.companyName}`} intro={settings.tagline} image={null} />
 
       {(hasStory || hasValues) && (
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 lg:grid-cols-2">
+        <Reveal stagger className="mx-auto grid max-w-6xl gap-10 px-4 py-14 lg:grid-cols-2">
           {hasStory && (
             <section aria-labelledby="story-title">
               {settings.story && (
@@ -85,7 +88,7 @@ export default async function AboutPage() {
               )}
             </section>
           )}
-        </div>
+        </Reveal>
       )}
 
       <TrustSection settings={settings} testimonials={testimonials} />

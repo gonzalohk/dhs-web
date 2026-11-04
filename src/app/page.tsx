@@ -3,12 +3,12 @@ import Link from "next/link";
 import { CategoryCard } from "@/components/CategoryCard";
 import { CheckIcon } from "@/components/icons";
 import { JsonLd } from "@/components/JsonLd";
-import { Parallax } from "@/components/Parallax";
 import { Reveal } from "@/components/Reveal";
+import { SectionTitle } from "@/components/SectionTitle";
 import { TrustSection } from "@/components/TrustSection";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { getCatalog, getPageTexts, getSettings, getTestimonials, pageText } from "@/lib/content";
-import { COVER_ALT, cover } from "@/content/cover";
+import { COVER_ALT } from "@/content/cover";
 import { buildMetadata, localBusinessJsonLd } from "@/lib/seo";
 
 export const revalidate = 3600;
@@ -73,51 +73,34 @@ export default async function HomePage() {
     <>
       <JsonLd data={localBusinessJsonLd(settings)} />
 
-      {cover ? (
-        /* The cover is the section background: the photo fills the section and adapts to its size, with a
-           navy layer on top so the company name and the actions stay readable at every screen size.
-           Without a cover (see src/content/cover.ts) the text-only hero below is used. */
-        <section aria-label="DHS" className="on-dark relative isolate overflow-hidden bg-brand-900">
-          <Parallax to={12} className="absolute inset-x-0 -top-[14%] -z-20 h-[128%]">
-            <Image
-              src={cover}
-              alt={COVER_ALT}
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover object-[center_15%]"
-            />
-          </Parallax>
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 -z-10 bg-gradient-to-r from-brand-900/90 via-brand-900/70 to-brand-900/35"
-          />
-          <Reveal stagger className="mx-auto max-w-6xl px-4 py-16 sm:py-24">
+      {/* Foody-style hero, like the template: the vegetable basket fills the right of a full-width
+          band, and the text sits over the image's own light, fruit-watermarked left. Swap
+          public/foody/carousel-1.jpg to change the photo. */}
+      <section
+        aria-label={settings.companyName}
+        className="relative isolate -mt-[72px] flex min-h-[38rem] items-center overflow-hidden bg-brand-50 pt-[72px]"
+      >
+        <Image
+          src="/foody/carousel-1.jpg"
+          alt={COVER_ALT}
+          fill
+          priority
+          sizes="100vw"
+          className="-z-10 object-cover object-[right_center]"
+        />
+
+        <div className="text-halo mx-auto w-full max-w-6xl px-4 py-12">
+          <Reveal stagger className="max-w-xl">
             {t("home.eyebrow") && (
-              <p className="font-semibold text-accent-400">{t("home.eyebrow")}</p>
+              <p className="font-semibold tracking-wide text-accent-700 uppercase">
+                {t("home.eyebrow")}
+              </p>
             )}
-            <h1 className="mt-2 max-w-3xl font-display text-4xl font-bold tracking-tight text-white sm:text-6xl">
+            <h1 className="mt-2 font-display text-4xl font-bold tracking-tight text-brand-800 sm:text-5xl lg:text-6xl">
               {t("home.title")}
             </h1>
             {settings.tagline && (
-              <p className="mt-4 max-w-2xl text-lg text-brand-100">{settings.tagline}</p>
-            )}
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <HeroActions phone={settings.whatsappNumber} variant="on-image" />
-            </div>
-          </Reveal>
-        </section>
-      ) : (
-        <section className="bg-gradient-to-br from-brand-50 to-white">
-          <Reveal stagger className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
-            {t("home.eyebrow") && (
-              <p className="font-semibold text-accent-700">{t("home.eyebrow")}</p>
-            )}
-            <h1 className="mt-2 max-w-3xl font-display text-3xl font-bold tracking-tight text-brand-800 sm:text-5xl">
-              {t("home.title")}
-            </h1>
-            {settings.tagline && (
-              <p className="mt-4 max-w-2xl text-lg text-muted">{settings.tagline}</p>
+              <p className="mt-4 max-w-md text-lg text-muted">{settings.tagline}</p>
             )}
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <HeroActions phone={settings.whatsappNumber} />
@@ -128,21 +111,20 @@ export default async function HomePage() {
               </p>
             )}
           </Reveal>
-        </section>
-      )}
+        </div>
+      </section>
 
       {catalog.length > 0 && (
-        <section aria-labelledby="categories-title" className="mx-auto max-w-6xl px-4 py-14">
+        <section aria-labelledby="categories-title" className="mx-auto max-w-6xl px-4 py-16">
           <Reveal>
-            <h2
+            <SectionTitle
               id="categories-title"
-              className="font-display text-2xl font-bold text-brand-800 sm:text-3xl"
-            >
-              Nuestros productos
-            </h2>
-            {categoriesIntro && <p className="mt-2 text-muted">{categoriesIntro}</p>}
+              eyebrow="Nuestro catálogo"
+              title="Nuestros productos"
+              intro={categoriesIntro}
+            />
           </Reveal>
-          <Reveal stagger className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <Reveal stagger className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {catalog.map((category) => (
               <CategoryCard key={category.id} category={category} />
             ))}
@@ -151,25 +133,29 @@ export default async function HomePage() {
       )}
 
       {benefits.length > 0 && (
-        <section aria-labelledby="benefits-title" className="bg-brand-50">
-          <div className="mx-auto max-w-6xl px-4 py-14">
+        <section aria-labelledby="benefits-title" className="bg-veg bg-brand-50">
+          <div className="mx-auto max-w-6xl px-4 py-16">
             <Reveal>
-              <h2
+              <SectionTitle
                 id="benefits-title"
-                className="font-display text-2xl font-bold text-brand-800 sm:text-3xl"
-              >
-                ¿Por qué elegirnos?
-              </h2>
+                align="center"
+                eyebrow="Por qué DHS"
+                title="¿Por qué elegirnos?"
+              />
             </Reveal>
-            <Reveal as="ul" stagger className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <Reveal as="ul" stagger className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {benefits.map((b) => (
                 <li
                   key={b.title}
-                  className="rounded-2xl bg-white p-5 shadow-sm transition-shadow transition-transform duration-300 hover:-translate-y-1 hover:shadow-md"
+                  className="rounded-2xl bg-white p-6 text-center shadow-[0_0_45px_rgba(0,0,0,0.07)] transition-transform duration-300 hover:-translate-y-1"
                 >
-                  <CheckIcon className="size-7 text-support-700" />
-                  <h3 className="mt-3 font-semibold">{b.title}</h3>
-                  <p className="mt-1 text-sm text-muted">{b.text}</p>
+                  <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-support-700 text-white">
+                    <CheckIcon className="size-7" />
+                  </span>
+                  <h3 className="mt-4 font-display text-lg font-semibold text-brand-800">
+                    {b.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-muted">{b.text}</p>
                 </li>
               ))}
             </Reveal>

@@ -13,19 +13,21 @@ export function ProductCard({ product, fallbackImage, whatsappNumber }: Props) {
     : `Hola, quisiera una cotización de ${product.name}.`;
   return (
     <article
-      className="flex flex-col overflow-hidden rounded-2xl border border-brand-100 bg-white shadow-sm"
+      className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_0_45px_rgba(0,0,0,0.07)] transition-shadow duration-300 hover:shadow-[0_0_55px_rgba(0,0,0,0.13)]"
       data-testid="product"
     >
-      <Image
-        src={product.imageSrc ?? fallbackImage ?? "/images/placeholder.svg"}
-        alt={product.imageAlt}
-        width={400}
-        height={250}
-        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-        className="aspect-[8/5] w-full object-cover"
-      />
+      <div className="zoom-img">
+        <Image
+          src={product.imageSrc ?? fallbackImage ?? "/images/placeholder.svg"}
+          alt={product.imageAlt}
+          width={400}
+          height={250}
+          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          className="aspect-[8/5] w-full object-cover"
+        />
+      </div>
       <div className="flex flex-1 flex-col p-5">
-        <h2 className="text-lg font-semibold text-brand-800">{product.name}</h2>
+        <h2 className="font-display text-lg font-semibold text-brand-800">{product.name}</h2>
         <p className="mt-1 flex-1 text-sm text-muted">{product.description}</p>
         <p className="mt-4 min-h-7 text-lg font-bold text-ink" data-testid="price">
           {hasPrice ? (

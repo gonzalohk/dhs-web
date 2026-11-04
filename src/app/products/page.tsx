@@ -1,6 +1,7 @@
 import { CategoryCard } from "@/components/CategoryCard";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHeader } from "@/components/PageHeader";
+import { Reveal } from "@/components/Reveal";
 import { getCatalog, getPageTexts, getSettings, pageText } from "@/lib/content";
 import { breadcrumbJsonLd, buildMetadata, itemListJsonLd } from "@/lib/seo";
 
@@ -35,12 +36,16 @@ export default async function ProductsPage() {
           catalog.map((c) => ({ name: c.name, path: `/products/${c.slug}` })),
         )}
       />
-      <PageHeader title="Productos" intro={pageText(texts, "products.intro", settings)} />
-      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-12 sm:grid-cols-2 lg:grid-cols-3">
+      <PageHeader
+        title="Productos"
+        intro={pageText(texts, "products.intro", settings)}
+        image={null}
+      />
+      <Reveal stagger className="mx-auto grid max-w-6xl gap-6 px-4 py-12 sm:grid-cols-2 lg:grid-cols-3">
         {catalog.map((category, i) => (
           <CategoryCard key={category.id} category={category} priority={i < 3} headingLevel="h2" />
         ))}
-      </div>
+      </Reveal>
     </>
   );
 }
