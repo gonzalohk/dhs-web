@@ -75,18 +75,20 @@ export default async function HomePage() {
 
       {/* Foody-style hero, like the template: the vegetable basket fills the right of a full-width
           band, and the text sits over the image's own light, fruit-watermarked left. Swap
-          public/foody/carousel-1.jpg to change the photo. */}
+          public/foody/carousel-1.jpg to change the photo. Below md (phones) the photo is hidden
+          and the band shows only the fruit watermark, like the interior page headers. */}
       <section
         aria-label={settings.companyName}
-        className="relative isolate -mt-[72px] flex min-h-[38rem] items-center overflow-hidden bg-brand-50 pt-[72px]"
+        className="bg-veg relative isolate -mt-[72px] flex min-h-[26rem] items-center overflow-hidden bg-brand-50 pt-[72px] md:min-h-[38rem]"
       >
+        {/* No `priority`: a priority image is preloaded even when hidden, wasting a phone's
+            bandwidth. Lazy loading skips display:none images and still loads at once on desktop. */}
         <Image
           src="/foody/carousel-1.jpg"
           alt={COVER_ALT}
           fill
-          priority
           sizes="100vw"
-          className="-z-10 object-cover object-[right_center]"
+          className="-z-10 hidden object-cover object-[right_center] md:block"
         />
 
         <div className="text-halo mx-auto w-full max-w-6xl px-4 py-12">
